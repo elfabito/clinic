@@ -1,0 +1,151 @@
+{% extends "layout.html" %}
+{% load static %}
+{% block body %}
+<!-- <div class="input-group">
+    <span class="input-group-text">First and last name</span>
+    <p class="h6">{{patient.user.first_name}} </p>
+    <p class="h6"> </p>
+</div>
+ <div class="input-group">
+    <span class="input-group-text">Gender</span>
+    <select class="form-select" aria-label="Default select example">
+        <option selected>Gender</option>
+        <option value="1">Male</option>
+        <option value="2">Female</option>
+        <option value="3">Dont want to say</option>
+    </select>
+</div> -->
+{% if message %}
+<div>{{ message }}</div>
+{% endif %}
+<div class="container">
+    <h2>Profile {{doctor.user.first_name}} </h2>
+    <table class="table">
+        <!-- <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">First</th>
+                <th scope="col">Last</th>
+                <th scope="col">Handle</th>
+            </tr>
+        </thead> -->
+        <tbody>
+            <tr id="tname">
+                <th scope="row">Name :</th>
+                <td id="fname">{{doctor.user.first_name}}</td>
+                <td colspan="2" id="nbutton"><button id="buttonEditN" onclick="editFirst()"> Edit </button></td>
+            </tr>
+            <tr id="tlast">
+                <th scope="row">Last Name :</th>
+                <td id="lname">{{doctor.user.last_name}}</td>
+                <td colspan="2" id="lbutton"><button id="buttonEditL" onclick="editLast()"> Edit </button></td>
+            </tr>
+            <tr id="tgender">
+                <th scope="row">Gender :</th>
+                <td colspan="1" id="gender">{{doctor.gender}}</td>
+                <td colspan="2" id="gbutton"><button id="buttonEditG" onclick="editGender()"> Edit </button></td>
+            </tr>
+            <tr id=" tphone">
+                <th scope="row">Phone :</th>
+                <td colspan="1" id="pphone">{{doctor.phone}}</td>
+                <td colspan="2" id="tbutton"><button id="buttonEdit" onclick="editPhone()"> Edit </button></td>
+                <span id="error"></span>
+            </tr>
+
+            <tr id=" tavailable">
+                <th scope="row">Available :</th>
+
+                <td colspan="1" id="available">
+                    <!-- {%for time in doctor.available%}
+                    {{time.value}} -
+                    {%endfor%} -->
+                    <div id="availabledata">
+                        {%for time in doctor.available%}
+                        {{time | safe}}
+                        <br>
+                        {%endfor%}
+                    </div>
+                    <select class="form-select form-select-lg mb-3" style="text-align: center;" multiple name="option"
+                        id="timeform">
+                        <option value="">--Choose until 3 options--</option>
+                        <option value="09:00 – 10:00">09:00 – 10:00</option>
+                        <option value="10:00 – 11:00">10:00 – 11:00</option>
+                        <option value="11:00 – 12:00">11:00 – 12:00</option>
+                        <option value="13:00 – 14:00">13:00 – 14:00</option>
+                        <option value="14:00 – 15:00">14:00 – 15:00</option>
+                        <option value="15:00 – 16:00">15:00 – 16:00</option>
+                        <option value="16:00 – 17:00">16:00 – 17:00</option>
+                        <option value="17:00 – 18:00">17:00 – 18:00</option>
+                        <option value="18:00 – 19:00">18:00 – 19:00</option>
+                    </select>
+                    <!-- <form  action="" method="post">{{form2.as_p}}</form> -->
+                    <!-- <div id="timeform" class="ui slider checkbox">
+                        {% for value, text in form.available.field.choices %}
+                        <form id="formavailable">
+                            <input id="available_{{ forloop.counter0 }}" name="{{ form.available.name }}"
+                                type="checkbox" value="{{ text }}" {% if value in checked_available %} checked="checked"
+                                {% endif %}>
+                            <label>{{ text }}</label>
+                        </form>
+                        {% endfor %}
+
+                    </div> -->
+                </td>
+
+
+
+                <td colspan="2" id="abutton"><button id="buttonEditA" onclick="editAvailable()"> Edit </button></td>
+
+
+                <span id="error"></span>
+            </tr>
+
+
+            <tr id=" tposition">
+                <th scope="row">Position :</th>
+                <td colspan="1" id="position">{{doctor.position}}</td>
+                <td colspan="2" id="pbutton"><button id="buttonEditP" onclick="editPosition()"> Edit </button></td>
+                <!-- <label for="specialist" for="specialist">Especialista</label>
+                <select class="form-control" name="specialist" id="specialist">
+                    <option value="kinesiologia">Kiniesologia</option>
+                    <option value="masajista">Masajista</option>
+                    <option value="quiropraxia">Quiropraxia</option>
+                    <option value="otro">Otro</option>
+
+                </select> -->
+                <span id="error"></span>
+            </tr>
+            <tr id=" tdescription">
+                <th scope="row">Description :</th>
+                <td colspan="1" id="description">{{doctor.description}}</td>
+                <td colspan="2" id="dbutton"><button id="buttonEditD" onclick="editDescription()"> Edit </button></td>
+                <span id="error"></span>
+            </tr>
+        </tbody>
+    </table>
+    <!-- <span class="input-group-text">Gender</span>
+    {% if patient.gender %}
+    <h6> {{patient.gender}} </h6>
+    {% else %}
+    <p> Insert gender</p>
+    {% endif %}
+    <button> Edit</button>
+</div>
+<div class="input-group">
+    <span class="input-group-text">Phone</span>
+    <p> {{patient.phone}} </p>
+    <button> Edit</button> -->
+</div>
+
+
+
+
+
+
+
+<div id="div_hclinica"></div>
+<div id="perfil"></div>
+
+
+
+{% endblock %}
