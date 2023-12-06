@@ -98,6 +98,8 @@ def registerDoctor(request):
             user.is_doctor = True
             user.save()
             doctor = Doctor.objects.create(user=user, position=specialist )
+            daytime  = DayTimeAvailable.objects.create(doctor=doctor)
+            daytime.save()
             doctor.save()
         except IntegrityError:
             return render(request, "registerdoctor.html", {
@@ -115,23 +117,39 @@ def perfil(request):
     doctors = Doctor.objects.all()
     return render(request, "profilepatient.html",{"patient":patient, "doctors":doctors})
 
-
+# def available(request, id):
+#     try:
+#         user = User.objects.get()
+#         doctor = Doctor.objects.get(user=user)
+#         daytime= DayTimeAvailable.objects.get()
+        
+#     except DayTimeAvailable.DoesNotExist:
+#         return JsonResponse({"error": "User not found."}, status=404)
+#     if request.method == "GET":
+#         return JsonResponse(daytime.serialize())
 @csrf_exempt
 def editUser(request, id):
     
     try:
         user = User.objects.get(pk=id)
+        all_doctors = Doctor.objects.all()
         if user.is_patient:
             patient = Patient.objects.get(user=user)
         elif user.is_doctor:
             doctor = Doctor.objects.get(user=user)
+            available= DayTimeAvailable.objects.get(doctor=doctor)
     except User.DoesNotExist:
         return JsonResponse({"error": "User not found."}, status=404)
     if request.method == "GET":
         if user.is_patient == True:
             return JsonResponse(patient.serialize())
         elif user.is_doctor == True:
-            return JsonResponse(doctor.serialize())
+            # available_serialize = available.serialize()
+            # data = {
+            #     "doctor":doctor.serialize(),
+            #     "available": available_serialize
+            # }
+            return JsonResponse(doctor.serialize(), safe=False)
     elif request.method == "PUT":
         
         
@@ -150,6 +168,7 @@ def editUser(request, id):
             
             patient.save()    
         elif user.is_doctor == True:
+            
             if data.get("phone") is not None:
                 doctor.phone = data["phone"]
             if data.get("gender") is not None:
@@ -158,8 +177,25 @@ def editUser(request, id):
                 doctor.position = data["position"]
             if data.get("description") is not None:
                 doctor.description = data["description"]
-            if data.get("available") is not None:
-                doctor.available = data["available"]
+            
+            # lunes = data.get("lunes"),
+            # print(lunes)
+            # martes = data.get("martes"),
+            # miercoles = data.get("miercoles"),
+            # jueves = data.get("jueves"),
+            # viernes = data.get("viernes"),
+            # sabado = data.get("sabado")
+            # print(sabado)
+            # available.lunes = lunes
+            # available.martes = martes
+            # available.miercoles = miercoles
+            # available.jueves = jueves
+            # available.viernes = viernes
+            # available.sabado = sabado
+            
+            # print(available)
+            # available.save()
+            
             # available = data.getlist("available")
             # doctor.available = available
             doctor.save()
@@ -182,64 +218,156 @@ def editUser(request, id):
 
 class FormPosition(forms.ModelForm):
     class Meta:
+        
         model = Doctor
         fields = ['position']
+        onchange="dynamicdropdown(this)"
+        widget=forms.Select(attrs={"onchange":'dynamicdropdown(this)'})
 class FormTime(forms.ModelForm):
     class Meta:
         model = Appointment
-        fields = ['time'] 
-
+        fields = ['time']
+@csrf_exempt
+def available(request,id):
+    try:
+        user = User.objects.get(pk=id)
+        doctor = Doctor.objects.get(user=user)
+        all_doctors = Doctor.objects.all()
+        if user.is_doctor:
+            
+            available= DayTimeAvailable.objects.get(doctor=doctor)
+    except User.DoesNotExist:
+        return JsonResponse({"error": "User not found."}, status=404)
+    if request.method == "GET":
+        if user.is_doctor == True:
+            available_serialize = available.serialize()
+            data = {
+                "doctor":doctor.serialize(),
+                "available": available_serialize
+            }
+            return JsonResponse(data, safe=False)
+    elif request.method == "PUT":
+        
+        
+        data = json.loads(request.body)
+        if user.is_doctor == True:
+            
+           
+            
+            lunes = data.get("lunes"),
+            print(lunes)
+            martes = data.get("martes"),
+            miercoles = data.get("miercoles"),
+            jueves = data.get("jueves"),
+            viernes = data.get("viernes"),
+            sabado = data.get("sabado")
+            print(sabado)
+            available.lunes = lunes
+            available.martes = martes
+            available.miercoles = miercoles
+            available.jueves = jueves
+            available.viernes = viernes
+            available.sabado = sabado
+            
+            print(available)
+            available.save()
+            
+            # available = data.getlist("available")
+            # doctor.available = available
+            
+        
+    # elif request.method == "POST":    
+        
+                
+    #             doctor.save()
+    #             return HttpResponse(status=204)
+        
+    #     # Ensure password matches confirmation
+        
+        
+        
+        return HttpResponse(status=204)
 def perfilDoctor(request):
     try:
         doctor = Doctor.objects.get(user=request.user)
+        daytime = DayTimeAvailable.objects.get(doctor=doctor)
         # form = FormAvailable(request.POST)
         # form2 = AvailableForm()
     except Doctor.DoesNotExist:
         return JsonResponse({"error": "No Doctor found with that user."}, status=404)
     
-    return render(request, "profiledoctor.html",{"doctor":doctor })
-
-@csrf_exempt
+    return render(request, "profiledoctor.html",{"doctor":doctor,"daytime":daytime.serialize() })
 def reserva(request):
+        try:
+            user = User.objects.get(pk=request.user.id)
+            doctor = User.objects.filter(is_doctor=True)
+            patient = Patient.objects.get(user=user)
+            kinesiologo = Doctor.objects.filter(position="Kinesiologia")
+            masajista = Doctor.objects.filter(position="Masajista")
+            Quiropraxia = Doctor.objects.filter(position="Quiropraxia")
+            form = FormPosition()
+            # formTime = FormTime()
+            print(f'ASDSADS {kinesiologo.first()}')
+        except Patient.DoesNotExist:
+                return JsonResponse({"error": "Post not found."}, status=404)
+        if request.method == "GET":
+            return render(request , "reserva.html", {
+                "patient":patient,
+                "form": form, 
+                # "formTime": formTime, 
+                "k": kinesiologo.first(),
+                "m": masajista,
+                "q": Quiropraxia
+                })
+@csrf_exempt
+def reservaUser(request, id):
     try:
-        user = User.objects.get(pk=request.user.id)
+        user = User.objects.get(pk=id)
         doctor = User.objects.filter(is_doctor=True)
         patient = Patient.objects.get(user=user)
         kinesiologo = Doctor.objects.filter(position="Kinesiologia")
         masajista = Doctor.objects.filter(position="Masajista")
         Quiropraxia = Doctor.objects.filter(position="Quiropraxia")
-        form = FormPosition()
-        formTime = FormTime()
+        # form = FormPosition()
+        # formTime = FormTime()
         print(f'ASDSADS {kinesiologo.first()}')
     except Patient.DoesNotExist:
         return JsonResponse({"error": "Post not found."}, status=404)
     if request.method == "GET":
         return render(request , "reserva.html", {
             "patient":patient,
-            "form": form, 
-            "formTime": formTime, 
+            # "form": form, 
+            # "formTime": formTime, 
             "k": kinesiologo.first(),
             "m": masajista,
             "q": Quiropraxia
              })
         # return JsonResponse(appointment.serialize())
-    elif request.method == "POST":
+    elif request.method == "PUT":
         
         
         data = json.loads(request.body)
-        
+        doctor_data = data.get("doctor")
+        print(doctor_data)
+        doctor_selected = Doctor.objects.filter(id == doctor_data)
+        print(doctor_selected)
         service = data.get("service","")
-        dayrequest = data.get("day","")
-        timerequest = data.get("time_ordered","")
-        time = data.get("time","")
+        print(service)
+        print(doctor)
+        dayOrdered = data.get("dayOrdered","")
+        timeOrdered = data.get("timeOrdered","")
+        timeConsulta = data.get("timeConsulta","")
+        dayConsulta = data.get("dayConsulta")
         
         
         new_appointment = Appointment(
-            user=user,
+            patient=patient,
+            doctor = doctor_selected,
             service=service,
-            day=dayrequest, 
-            time=timerequest, 
-            time_ordered=time,
+            timeConsulta=timeConsulta,
+            dayConsulta=dayConsulta, 
+            timeOrdered=timeOrdered, 
+            dayOrderedrdered=dayOrdered,
             phone=patient.phone
             )
         new_appointment.save()
@@ -257,6 +385,9 @@ def userPanel(request):
         'appointments':appointments,
     })
 
+def allDoctors(request):
+    doctors = Doctor.objects.all()
+    return JsonResponse([doctor.serialize() for doctor in doctors], safe=False)
 
 # TIME_CHOICES = (
 #         (0, '09:00 – 10:00'),

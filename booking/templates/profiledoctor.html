@@ -56,18 +56,126 @@
                 <th scope="row">Available :</th>
 
                 <td colspan="1" id="available">
-                    <!-- {%for time in doctor.available%}
-                    {{time.value}} -
-                    {%endfor%} -->
+                    <!-- {{daytime| safe }} -->
                     <div id="availabledata">
-                        {%for time in doctor.available%}
-                        {{time | safe}}
-                        <br>
+                        {% if daytime.lunes %}
+                        Lunes : {% for time in daytime.lunes %}
+                        {{time | safe }}
+                        &nbsp&nbsp&nbsp
                         {%endfor%}
+                        <br>
+                        {%endif%}
+
+                        {% if daytime.martes %}
+                        Martes : {% for time in daytime.martes %}
+                        {{time | safe }}
+                        &nbsp&nbsp&nbsp
+                        {%endfor%}
+                        <br>
+                        {%endif%}
+
+                        {% if daytime.miercoles %}
+                        Miercoles : {% for time in daytime.miercoles %}
+                        {{time | safe }}
+                        &nbsp&nbsp&nbsp
+                        {%endfor%}
+                        <br>
+                        {%endif%}
+
+                        {% if daytime.jueves %}
+                        Jueves : {% for time in daytime.jueves %}
+                        {{time | safe }}
+                        &nbsp&nbsp&nbsp
+                        {%endfor%}
+                        <br>
+                        {%endif%}
+
+                        {% if daytime.viernes %}
+                        Viernes : {% for time in daytime.viernes %}
+                        {{time | safe }}
+                        &nbsp&nbsp&nbsp
+                        {%endfor%}
+                        <br>
+                        {%endif%}
+
+                        {% if daytime.sabado %}
+                        Sabado : {% for time in daytime.sabado %}
+                        {{time | safe }}
+                        &nbsp&nbsp&nbsp
+                        {%endfor%}
+
+                        {%endif%}
+
+
                     </div>
                     <select class="form-select form-select-lg mb-3" style="text-align: center;" multiple name="option"
-                        id="timeform">
-                        <option value="">--Choose until 3 options--</option>
+                        id="lunes">
+                        <option value="">--Lunes--</option>
+                        <option value="09:00 – 10:00">09:00 – 10:00</option>
+                        <option value="10:00 – 11:00">10:00 – 11:00</option>
+                        <option value="11:00 – 12:00">11:00 – 12:00</option>
+                        <option value="13:00 – 14:00">13:00 – 14:00</option>
+                        <option value="14:00 – 15:00">14:00 – 15:00</option>
+                        <option value="15:00 – 16:00">15:00 – 16:00</option>
+                        <option value="16:00 – 17:00">16:00 – 17:00</option>
+                        <option value="17:00 – 18:00">17:00 – 18:00</option>
+                        <option value="18:00 – 19:00">18:00 – 19:00</option>
+                    </select>
+                    <select class="form-select form-select-lg mb-3" style="text-align: center;" multiple name="optionm"
+                        id="martes">
+                        <option value="">--Martes--</option>
+                        <option value="09:00 – 10:00">09:00 – 10:00</option>
+                        <option value="10:00 – 11:00">10:00 – 11:00</option>
+                        <option value="11:00 – 12:00">11:00 – 12:00</option>
+                        <option value="13:00 – 14:00">13:00 – 14:00</option>
+                        <option value="14:00 – 15:00">14:00 – 15:00</option>
+                        <option value="15:00 – 16:00">15:00 – 16:00</option>
+                        <option value="16:00 – 17:00">16:00 – 17:00</option>
+                        <option value="17:00 – 18:00">17:00 – 18:00</option>
+                        <option value="18:00 – 19:00">18:00 – 19:00</option>
+                    </select>
+                    <select class="form-select form-select-lg mb-3" style="text-align: center;" multiple name="optionmi"
+                        id="miercoles">
+                        <option value="">--Miercoles--</option>
+                        <option value="09:00 – 10:00">09:00 – 10:00</option>
+                        <option value="10:00 – 11:00">10:00 – 11:00</option>
+                        <option value="11:00 – 12:00">11:00 – 12:00</option>
+                        <option value="13:00 – 14:00">13:00 – 14:00</option>
+                        <option value="14:00 – 15:00">14:00 – 15:00</option>
+                        <option value="15:00 – 16:00">15:00 – 16:00</option>
+                        <option value="16:00 – 17:00">16:00 – 17:00</option>
+                        <option value="17:00 – 18:00">17:00 – 18:00</option>
+                        <option value="18:00 – 19:00">18:00 – 19:00</option>
+                    </select>
+                    <select class="form-select form-select-lg mb-3" style="text-align: center;" multiple name="optionj"
+                        id="jueves">
+                        <option value="">--Jueves--</option>
+                        <option value="09:00 – 10:00">09:00 – 10:00</option>
+                        <option value="10:00 – 11:00">10:00 – 11:00</option>
+                        <option value="11:00 – 12:00">11:00 – 12:00</option>
+                        <option value="13:00 – 14:00">13:00 – 14:00</option>
+                        <option value="14:00 – 15:00">14:00 – 15:00</option>
+                        <option value="15:00 – 16:00">15:00 – 16:00</option>
+                        <option value="16:00 – 17:00">16:00 – 17:00</option>
+                        <option value="17:00 – 18:00">17:00 – 18:00</option>
+                        <option value="18:00 – 19:00">18:00 – 19:00</option>
+                    </select>
+                    <select class="form-select form-select-lg mb-3" style="text-align: center;" multiple name="optionv"
+                        id="viernes">
+                        <option value="">--Viernes--</option>
+                        <option value="09:00 – 10:00">09:00 – 10:00</option>
+                        <option value="10:00 – 11:00">10:00 – 11:00</option>
+                        <option value="11:00 – 12:00">11:00 – 12:00</option>
+                        <option value="13:00 – 14:00">13:00 – 14:00</option>
+                        <option value="14:00 – 15:00">14:00 – 15:00</option>
+                        <option value="15:00 – 16:00">15:00 – 16:00</option>
+                        <option value="16:00 – 17:00">16:00 – 17:00</option>
+                        <option value="17:00 – 18:00">17:00 – 18:00</option>
+                        <option value="18:00 – 19:00">18:00 – 19:00</option>
+                    </select>
+                    <select class="form-select form-select-lg mb-3" style="text-align: center;" multiple name="options"
+                        id="sabado">
+                        <option value="">--Sabado--</option>
                         <option value="09:00 – 10:00">09:00 – 10:00</option>
                         <option value="10:00 – 11:00">10:00 – 11:00</option>
                         <option value="11:00 – 12:00">11:00 – 12:00</option>

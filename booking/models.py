@@ -111,11 +111,12 @@ class User(AbstractUser):
         }
     
 
+
 class Doctor(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
-    position = models.CharField(max_length=100, choices=CHOICES)
+    position = models.CharField(max_length=100, choices=CHOICES, blank=True)
     employment_date = models.DateTimeField(default=datetime.now)
-    available = MultiSelectField(max_choices=3,max_length=33, choices=TIME_CHOICES, blank=True, null=True)
+    # available = models.OneToOneField(DayTimeAvailable, null=True, on_delete=models.CASCADE)
     
     phone = models.CharField(max_length=17, blank=True)
     
@@ -131,12 +132,36 @@ class Doctor(models.Model):
             "last_name": self.user.last_name,
             "position": self.position,
             "employment_date " : self.employment_date ,
-            "available": [time for time in self.available],
+            
             "description": self.description,
             "gender": self.gender,
             "phone": self.phone,
             
         }
+    
+class DayTimeAvailable(models.Model):
+    doctor = models.OneToOneField(Doctor, null=True, on_delete=models.CASCADE, related_name="daytime")
+    lunes = MultiSelectField(max_choices=3,max_length=33, choices=TIME_CHOICES, blank=True, null=True)
+    martes = MultiSelectField(max_choices=3,max_length=33, choices=TIME_CHOICES, blank=True, null=True)
+    miercoles = MultiSelectField(max_choices=3,max_length=33, choices=TIME_CHOICES, blank=True, null=True)
+    jueves = MultiSelectField(max_choices=3,max_length=33, choices=TIME_CHOICES, blank=True, null=True)
+    viernes = MultiSelectField(max_choices=3,max_length=33, choices=TIME_CHOICES, blank=True, null=True)
+    sabado = MultiSelectField(max_choices=3,max_length=33, choices=TIME_CHOICES, blank=True, null=True)
+    def __str__(self):
+        return str(f'HORARIOS DE {self.doctor.user.first_name} // Lunes : {[time for time in self.lunes ]}  Martes : {[time for time in self.martes]} </br> Miercoles : {[time for time in self.miercoles]} </br> Jueves : {[time for time in self.jueves]} </br> Viernes : {[time for time in self.viernes]} </br> Sabado : {[time for time in self.sabado]}' )
+    def serialize(self):
+        return {
+            "doctor": self.doctor.user.first_name,
+            "position": self.doctor.position,
+            "lunes": self.lunes,
+            "martes": self.martes,
+            "miercoles": self.miercoles,
+            "jueves" : self.jueves,
+            "viernes": self.viernes,
+            "sabado": self.sabado
+            
+        }
+    
 class Patient(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     gender = models.CharField(choices=GENDER_CHOICES, max_length=128)

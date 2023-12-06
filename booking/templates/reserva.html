@@ -54,13 +54,15 @@
 
             </select>
         </div> -->
-        <div class="form-group">
+        <form class="form-group" id="specialist" name="specialist" onchange="dynamicdropdown(this);">
+            {{form }}
+        </form>
+        <div>
             </br>
             <div class="category_div" id="category_div">
-                <label for="specialist" for="specialist">Seleccione con quien desea la consulta</label>
-                <select class="form-control" id="specialist" name="specialist"
-                    onchange="dynamicdropdown(this.options[this.selectedIndex].value);">
-                    <option value=" ">---------</option>
+                <label for="specialist">Seleccione con quien desea la consulta</label>
+                <select class="form-control" id="specialist" name="specialist" onchange="dynamicdropdown(this);">
+                    <option value="">---------</option>
                     <option value="kinesiologia">Kinesiologia</option>
                     <option value="masajista">Masajista</option>
                     <option value="quiropraxia">Quiropraxia</option>
@@ -68,21 +70,24 @@
                 </select>
             </div>
             <div id="time">
-                <label for="status" for="specialist">Horario de Consulta :</label>
-                <script type="text/javascript" language="JavaScript">
+            </div>
+            <!-- <label for="status" for="specialist">Horario de Consulta :</label> -->
+            <!-- <script type="text/javascript" language="JavaScript">
                     document.write('<select class="form-control" name="status" id="status"><option value="">--------</option></select>')
-                </script>
-
-                <div id="ktime">
+                </script> -->
+            <!-- <select class="form-control" name="status" id="status">
+                    <option value="">--------</option>
+                </select> -->
+            <!-- <div id="ktime">
                     {% for time in k.available %}
                     <option class="kavailable" value="{{time}}">{{time}}</option>
 
                     {% endfor%}
-                </div>
-                <!-- <script type="text/javascript" language="JavaScript">
+                </div> -->
+            <!-- <script type="text/javascript" language="JavaScript">
                     document.write('<select class="form-control" name="status" id="status"><option value="">--------</option></select>')
                 </script> -->
-            </div>
+
 
 
             <!-- {{form}}
@@ -116,22 +121,24 @@
                         <option value="delivered">DELIVERED</option>
                         <option value="open">09:00 – 10:00</option>
                         <option value="delivered">DELIVERED</option>
-                        
+
                     </select>
                 </noscript> -->
-        </div>
+            </br>
+            {% if patient.phone %}
+            <input class="btn btn-primary" type="submit" id="reserva" value="Reservar">
+            {%else %}
+            <a href="{% url 'perfil'%}">Actualiza los datos antes de continuar </a>
+            {% endif%}
 
+    </form>
+    </br>
+    Already have an account? <a href="{% url 'login' %}">Log In here.</a>
 </div>
-</br>
-{% if patient.phone %}
-<input class="btn btn-primary" type="submit" onclick="reserva()" value="Register">
-{%else %}
-<a href="{% url 'perfil'%}">Actualiza los datos antes de continuar </a>
-{% endif%}
 
-</form>
-Already have an account? <a href="{% url 'login' %}">Log In here.</a>
-</div>
+
+
+
 
 
 {% endblock %}

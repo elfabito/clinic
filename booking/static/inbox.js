@@ -1,7 +1,20 @@
 document.addEventListener("DOMContentLoaded", function () {
   // Use buttons to toggle between views
-  document.querySelector("#timeform").style.display = "none";
+  document.querySelector("#lunes").style.display = "none";
+  document.querySelector("#martes").style.display = "none";
+  document.querySelector("#miercoles").style.display = "none";
+  document.querySelector("#jueves").style.display = "none";
+  document.querySelector("#viernes").style.display = "none";
+  document.querySelector("#sabado").style.display = "none";
   document.getElementById("ktime").style.display = "none";
+  document
+    .getElementById("specialist")
+    .addEventListener("change", function (e) {
+      e.stopPropagation();
+      e.preventDefault();
+      // Call the dynamicdropdown function here
+      dynamicdropdown(e);
+    });
   // const form = document.querySelector("#formreserva");
   // form.document.getElementById("time").getElementById("ktime").style.display =
   //   "none";
@@ -41,111 +54,248 @@ document.addEventListener("DOMContentLoaded", function () {
 
   load_inicio();
 });
-// function updateModelsDropdown(event) {
-//   let // The "target" of the `change` event is the input that changed
-//     thisMake = event.target.value,
-//     // Gets the array of models from `cars` (If no make is selected, uses all models)
-//     relevantModels = cars[thisMake] || getAllModels();
-//   modelsDropdown.selectedIndex = 0; // Shows the first (blank) option
+function esDiferenteDia(diaSemana) {
+  // Obtener el día actual
+  let diaActual = new Date().getDay();
 
-//   // The select element's children are the options
-//   let optionElements = modelsDropdown.children;
-//   for (let option of optionElements) {
-//     // Uses CSS to hide (or unhide) HTML elements
-//     option.classList.add("hidden");
-
-//     // Keeps the blank option as well as the ones included in the array
-//     if (relevantModels.includes(option.value) || option.value === "") {
-//       option.classList.remove("hidden");
-//     }
-//   }
-// }
-
-// function updateMakesDropdown(event) {
-//   let thisModel = event.target.value,
-//     relevantMake = "",
-//     // Gets an array of the "keys" for an object
-//     allMakes = Object.keys(doctor);
-
-//   // Loops through the keys and tests each corresponding value (ie, each array of models)
-//   for (let make of allMakes) {
-//     let models = doctor[make];
-
-//     // Finds the key whose value includes the selected model
-//     if (models.includes(thisModel)) {
-//       // Saves the name of the key so we can select it in the makesDropdown
-//       relevantMake = make;
-//     }
-//   }
-//   let optionElements = makesDropdown.children;
-//   for (let i = 0; i < optionElements.length; i++) {
-//     // Finds the index of the matching value
-//     if (relevantMake === optionElements[i].value) {
-//       // Selects the option by its index
-//       makesDropdown.selectedIndex = i;
-//     }
-//   }
-// }
-
-// // Defines a helper function
-// function getAllModels() {
-//   // Gets an array of the "keys" for an object
-
-//   const makes = Object.keys(doctor);
-//   const models = []; // Starts with an empty array to push models into
-//   for (let make of makes) {
-//     // `cars[make]` retrieves the value (array of models) for that key
-//     // `...` spreads the array into individual values (models)
-//     // `push` adds each model to the new `models` array
-//     models.push(...doctor[make]);
-//   }
-//   return models;
-// }
-function dynamicdropdown() {
-  document.getElementById("specialist").addEventListener("change", function () {
-    var el = this;
-    var status = document.getElementById("status");
-
-    if (el.value === "kinesiologia") {
-      var options = status.querySelectorAll("option");
-      console.log(options.length);
-      if (options.length >= 1) {
-        status.removeChild(options[options.length - 1]);
-      }
-      var option = document.createElement("option");
-      const k = (document.getElementById("ktime").style.display = "block");
-      // console.log(time);
-      option.textContent = "18:00 – 19:00";
-      status.appendChild(option);
-      status.appendChild(k);
-    } else if (el.value === "masajista") {
-      if (options.length >= 1) {
-        status.removeChild(options[options.length - 1]);
-      }
-      var option = document.createElement("option");
-      option.textContent = "12:00 – 13:00";
-      status.appendChild(option);
-      var option1 = document.createElement("option");
-      option1.textContent = "13:00 – 14:00";
-      status.appendChild(option1);
-      var option2 = document.createElement("option");
-      option2.textContent = "15:00 – 16:00";
-      status.appendChild(option2);
-    } else if (el.value === "quiropraxia") {
-      var options = status.querySelectorAll("option");
-      if (options.length >= 1) {
-        status.removeChild(options[options.length - 1]);
-      }
-      var option = document.createElement("option");
-      option.textContent = "08:00 – 09:00";
-      status.appendChild(option);
-      var option1 = document.createElement("option");
-      option1.textContent = "18:00 – 19:00";
-      status.appendChild(option1);
-    }
-  });
+  // Verificar si el día proporcionado es igual al día actual
+  if (diaSemana === diaActual) {
+    return false; // Es el mismo día
+  } else {
+    return true; // No es el mismo día
+  }
 }
-//
+function siguienteFecha(diaSemana) {
+  // Verificar si el día proporcionado es válido (entre 0 y 6, representando domingo a sábado)
+  if (diaSemana >= 0 && diaSemana <= 6) {
+    // Obtener la fecha actual
+    let fechaActual = new Date();
+
+    // Calcular la cantidad de días que faltan para llegar al próximo día deseado
+    let diferencia = (diaSemana - fechaActual.getDay() + 7) % 7;
+
+    // Obtener la fecha del siguiente día deseado
+    let fechaSiguiente = new Date(
+      fechaActual.getTime() + diferencia * 24 * 60 * 60 * 1000
+    );
+
+    // Devolver la fecha del siguiente día
+    return fechaSiguiente.toLocaleDateString();
+  }
+}
+function populateDropdown(name, dayOfWeek, availableTimes) {
+  const timeDropdown = document.createElement("select");
+  const space = document.createElement("br");
+
+  const days = [
+    "Domingo",
+    "Lunes",
+    "Martes",
+    "Miercoles",
+    "Jueves",
+    "Viernes",
+    "Sabado",
+  ];
+  const option0 = document.createElement("option");
+  timeDropdown.id = `${name} ${dayOfWeek}`;
+  option0.textContent = `${days[dayOfWeek]} ${siguienteFecha(dayOfWeek)}`;
+  timeDropdown.appendChild(option0);
+
+  availableTimes.map((time) => {
+    const option = document.createElement("option");
+    option.value = `${time}`;
+    option.textContent = `${time}`;
+    timeDropdown.appendChild(option);
+  });
+
+  timeDropdown.appendChild(space);
+  document.getElementById("time").appendChild(timeDropdown);
+}
+function dynamicdropdown(el) {
+  var time = document.getElementById("time");
+  // Clear any previous content in the div
+  time.innerHTML = "";
+  console.log(el.value);
+  fechaActual = new Date();
+
+  // Create empty array for filters position of doctors
+
+  let m = [];
+  let q = [];
+  var k = [];
+  let o = [];
+
+  fetch(`/alldoctors`)
+    .then((response) => response.json())
+    .then((doctors) => {
+      doctors.filter((doctor) => {
+        if (doctor.position == "Kinesiologia") {
+          k.push(doctor);
+        }
+      });
+
+      doctors.filter((doctor) => {
+        if (doctor.position == "Masajista") {
+          m.push(doctor);
+        }
+      });
+
+      doctors.filter((doctor) => {
+        if (doctor.position == "Quiropraxia") {
+          q.push(doctor);
+        }
+      });
+
+      doctors.filter((doctor) => {
+        if (doctor.position == "Otro") {
+          o.push(doctor);
+        }
+      });
+
+      if (el.value == "kinesiologia") {
+        time.innerHTML = "";
+        if (k.length == 0) {
+          time.textContent = "";
+          let div = document.createElement("div");
+          div.innerHTML = `No Doctor Found`;
+          time.appendChild(div);
+        }
+
+        k.map((doctor) => {
+          fetch(`/available/${doctor.user_id}`)
+            .then((response) => response.json())
+            .then((data) => {
+              let doctoravailable = data.available;
+
+              let label = document.createElement("div");
+              label.innerHTML = `Horarios de ${doctor.first_name}  `;
+              time.appendChild(label);
+              if (doctoravailable.lunes.length != 0 && esDiferenteDia(1)) {
+                populateDropdown(doctor.first_name, 1, doctoravailable.lunes);
+              }
+              if (doctoravailable.martes.length != 0 && esDiferenteDia(2)) {
+                populateDropdown(doctor.first_name, 2, doctoravailable.martes);
+              }
+              if (doctoravailable.miercoles.length != 0 && esDiferenteDia(3)) {
+                populateDropdown(
+                  doctor.first_name,
+                  3,
+                  doctoravailable.miercoles
+                );
+              }
+              if (doctoravailable.jueves.length != 0 && esDiferenteDia(4)) {
+                populateDropdown(doctor.first_name, 4, doctoravailable.jueves);
+              }
+              if (doctoravailable.viernes.length != 0 && esDiferenteDia(5)) {
+                populateDropdown(doctor.first_name, 5, doctoravailable.viernes);
+              }
+              if (doctoravailable.sabado.length != 0 && esDiferenteDia(6)) {
+                populateDropdown(doctor.first_name, 6, doctoravailable.sabado);
+              }
+            });
+          var e = document
+            .getElementById("reserva")
+            .addEventListener("click", function (e) {
+              e.stopPropagation();
+              e.preventDefault();
+              // Call the dynamicdropdown function here
+              reserva(el, doctor);
+            });
+        });
+      } else if (el.value == "quiropraxia") {
+        time.innerHTML = "";
+        if (q.length == 0) {
+          time.textContent = "";
+          let div = document.createElement("div");
+          div.innerHTML = `No Doctor Found`;
+          time.appendChild(div);
+        }
+
+        q.map((doctor) => {
+          document.getElementById("time").innerHTML = "";
+          fetch(`/available/${doctor.user_id}`)
+            .then((response) => response.json())
+            .then((data) => {
+              let doctoravailable = data.available;
+
+              let label = document.createElement("div");
+              label.innerHTML = `Horarios de ${doctor.first_name}  `;
+              time.appendChild(label);
+              if (doctoravailable.lunes.length != 0 && esDiferenteDia(1)) {
+                populateDropdown(doctor.first_name, 1, doctoravailable.lunes);
+              }
+              if (doctoravailable.martes.length != 0 && esDiferenteDia(2)) {
+                populateDropdown(doctor.first_name, 2, doctoravailable.martes);
+              }
+              if (doctoravailable.miercoles.length != 0 && esDiferenteDia(3)) {
+                populateDropdown(
+                  doctor.first_name,
+                  3,
+                  doctoravailable.miercoles
+                );
+              }
+              if (doctoravailable.jueves.length != 0 && esDiferenteDia(4)) {
+                populateDropdown(doctor.first_name, 4, doctoravailable.jueves);
+              }
+              if (doctoravailable.viernes.length != 0 && esDiferenteDia(5)) {
+                populateDropdown(doctor.first_name, 5, doctoravailable.viernes);
+              }
+              if (doctoravailable.sabado.length != 0 && esDiferenteDia(6)) {
+                populateDropdown(doctor.first_name, 6, doctoravailable.sabado);
+              }
+            });
+        });
+      } else if (el.value == "masajista") {
+        time.innerHTML = "";
+        if (m.length == 0) {
+          time.textContent = "";
+          let div = document.createElement("div");
+          div.innerHTML = `No Doctor Found`;
+          time.appendChild(div);
+        }
+
+        m.map((doctor) => {
+          fetch(`/available/${doctor.user_id}`)
+            .then((response) => response.json())
+            .then((data) => {
+              let doctoravailable = data.available;
+
+              let label = document.createElement("div");
+              label.innerHTML = `Horarios de ${doctor.first_name}  `;
+              time.appendChild(label);
+              if (doctoravailable.lunes.length != 0 && esDiferenteDia(1)) {
+                populateDropdown(doctor.first_name, 1, doctoravailable.lunes);
+              }
+              if (doctoravailable.martes.length != 0 && esDiferenteDia(2)) {
+                populateDropdown(doctor.first_name, 2, doctoravailable.martes);
+              }
+              if (doctoravailable.miercoles.length != 0 && esDiferenteDia(3)) {
+                populateDropdown(
+                  doctor.first_name,
+                  3,
+                  doctoravailable.miercoles
+                );
+              }
+              if (doctoravailable.jueves.length != 0 && esDiferenteDia(4)) {
+                populateDropdown(doctor.first_name, 4, doctoravailable.jueves);
+              }
+              if (doctoravailable.viernes.length != 0 && esDiferenteDia(5)) {
+                populateDropdown(doctor.first_name, 5, doctoravailable.viernes);
+              }
+              if (doctoravailable.sabado.length != 0 && esDiferenteDia(6)) {
+                populateDropdown(doctor.first_name, 6, doctoravailable.sabado);
+              }
+            });
+        });
+      } else {
+        time.textContent = "";
+        let div = document.createElement("div");
+        div.innerHTML = `No Doctor Found`;
+        time.appendChild(div);
+      }
+    });
+}
+
 function editPhone() {
   var element = document.getElementById("pphone");
   let value = element.innerHTML;
@@ -359,12 +509,28 @@ function editAvailable() {
   var element = document.getElementById("availabledata");
   // let value = element.innerHTML;
   element.style.display = "none";
-  var btn = document.getElementById("abutton");
+  var btn = document.querySelector("#abutton");
   var btnEdit = document.getElementById("buttonEditA");
-  let form = document.getElementById("timeform");
-  form.style.display = "block";
-  console.log(form);
-  let button = document.createElement("button");
+  var button = document.createElement("button");
+  console.log(btn);
+  btn.innerHTML = "";
+  button.innerHTML = "Save";
+  console.log(button);
+  btn.append(button);
+
+  let lunes = document.getElementById("lunes");
+  let martes = document.getElementById("martes");
+  let miercoles = document.getElementById("miercoles");
+  let jueves = document.getElementById("jueves");
+  let viernes = document.getElementById("viernes");
+  let sabado = document.getElementById("sabado");
+  lunes.style.display = "block";
+  martes.style.display = "block";
+  miercoles.style.display = "block";
+  jueves.style.display = "block";
+  viernes.style.display = "block";
+  sabado.style.display = "block";
+
   // formavailable = document.getElementById("formavailable");
   // formavailable.addEventListener("submit", () => {
   //   const selectedOptions = [];
@@ -375,30 +541,84 @@ function editAvailable() {
   //     }
   //   });
   // });
-  button.innerHTML = "Save";
-  button.type = "submit";
 
   console.log(available);
   // input.id = "available";
   // input.type = "text";
   // form.name = "available";
-  btn.innerHTML = "";
-  btn.append(button);
+
   const user_id = JSON.parse(document.getElementById("user_id").textContent);
   // td.append(input);
   // td.append(space);
   button.addEventListener("click", (e) => {
-    let selectedOptions = [];
     e.preventDefault();
     var maxOptions = 3;
     var optionCount = 0;
-    var selected1 = [];
-    for (var i = 0; i < form.length; i++) {
-      if (form.options[i].selected) {
-        optionCount++;
-        selected1.push(`${form.options[i].value}`);
-        if (optionCount > maxOptions) {
+    var daytime = {
+      lunes: [],
+      martes: [],
+      miercoles: [],
+      jueves: [],
+      viernes: [],
+      sabado: [],
+    };
+    for (var i = 0; i < lunes.length; i++) {
+      if (lunes.options[i].selected) {
+        daytime.lunes.push(`${lunes.options[i].value}`);
+
+        if (lunes.options[i].selected.length > maxOptions) {
           alert("You can choose only 3, not submitting");
+
+          return false;
+        }
+      }
+    }
+    for (var i = 0; i < martes.length; i++) {
+      if (martes.options[i].selected) {
+        daytime.martes.push(`${martes.options[i].value}`);
+        if (martes.options[i].selected.length > maxOptions) {
+          alert("You can choose only 3, not submitting");
+
+          return false;
+        }
+      }
+    }
+    for (var i = 0; i < miercoles.length; i++) {
+      if (miercoles.options[i].selected) {
+        daytime.miercoles.push(`${miercoles.options[i].value}`);
+        if (miercoles.options[i].selected.length > maxOptions) {
+          alert("You can choose only 3, not submitting");
+
+          return false;
+        }
+      }
+    }
+    for (var i = 0; i < jueves.length; i++) {
+      if (jueves.options[i].selected) {
+        daytime.jueves.push(`${jueves.options[i].value}`);
+        if (jueves.options[i].selected.length > maxOptions) {
+          alert("You can choose only 3, not submitting");
+          optionCount = 0;
+          return false;
+        }
+      }
+    }
+    for (var i = 0; i < viernes.length; i++) {
+      if (viernes.options[i].selected) {
+        daytime.viernes.push(`${viernes.options[i].value}`);
+        if (viernes.options[i].selected.length > maxOptions) {
+          alert("You can choose only 3, not submitting");
+
+          return false;
+        }
+      }
+    }
+    for (var i = 0; i < sabado.length; i++) {
+      if (sabado.options[i].selected) {
+        daytime.sabado.push(`${sabado.options[i].value}`);
+        if (sabado.options[i].selected.length > maxOptions) {
+          alert("You can choose only 3 per day, not submitting");
+
           return false;
         }
       }
@@ -406,7 +626,7 @@ function editAvailable() {
     //  return true;
     //     if (form.options[i].selected )
     //   }
-    console.log(selected1);
+    console.log(daytime);
     // txtSelectedValuesObj.value = selectedArray;
 
     // for (const option of available) {
@@ -422,23 +642,38 @@ function editAvailable() {
     // );
 
     // let content_new = `[${tupleArray.join(", ")}]`;
-    console.log(selected1);
+
     // console.log(content_new);
-    fetch(`profile/${user_id}`, {
+    fetch(`available/${user_id}`, {
       method: "PUT",
       body: JSON.stringify({
-        available: `${selected1}`,
+        lunes: `${daytime.lunes}`,
+        martes: `${daytime.martes}`,
+        miercoles: `${daytime.miercoles}`,
+        jueves: `${daytime.jueves}`,
+        viernes: `${daytime.viernes}`,
+        sabado: `${daytime.sabado}`,
       }),
     }).then((result) => {
       btn.innerHTML = "";
       btn.append(btnEdit);
-      form.style.display = "none";
+      lunes.style.display = "none";
+      martes.style.display = "none";
+      miercoles.style.display = "none";
+      jueves.style.display = "none";
+      viernes.style.display = "none";
+      sabado.style.display = "none";
       element.style.display = "block";
-      element.innerHTML = "";
-      for (var i = 0; i < selected1.length; i++) {
-        element.innerHTML += selected1[i] + `</br>`;
-        // I'm only getting "David" as output!!
-      }
+      window.location.reload();
+      // element.innerHTML = "";
+      // for (const [key, value] of Object.entries(daytime)) {
+      //   console.log(key, value);
+      //   element.innerHTML += `${key} : ${value} ` + `</br>`;
+      // }
+      // for (var i = 0; i < selected1.length; i++) {
+      //   element.innerHTML += selected1[i] + `</br>`;
+      //   // I'm only getting "David" as output!!
+      // }
       // element.innerHTML = selected1;
     });
   });
@@ -473,6 +708,7 @@ function editPosition() {
     var value = e.value;
     text = e.options[e.selectedIndex].text;
     console.log(text);
+    console.log(user_id);
     fetch(`/profile/${user_id}`, {
       method: "PUT",
       body: JSON.stringify({
@@ -487,48 +723,49 @@ function editPosition() {
     });
   });
 }
-function reserva() {
-  var element = document.getElementById("position");
-  let value = element.innerHTML;
-  var array = ["Kinesologia", "Masajista", "Quiropraxia", "Otro"];
-  var btn = document.getElementById("pbutton");
-  var btnEdit = document.getElementById("buttonEditP");
-
-  let button = document.createElement("button");
-  var selectList = document.createElement("select");
-  button.innerHTML = "Save";
-  element.innerHTML = "";
-  for (var i = 0; i < array.length; i++) {
-    var option = document.createElement("option");
-    option.value = array[i];
-    option.text = array[i];
-    selectList.appendChild(option);
-  }
-  element.append(selectList);
-  selectList.id = "selectListId";
-  btn.innerHTML = "";
-  btn.append(button);
+function reserva(el, doctor) {
+  var e = document.getElementById("specialist");
+  var value = el.value;
+  console.log(value);
   const user_id = JSON.parse(document.getElementById("user_id").textContent);
-
-  button.addEventListener("click", (e) => {
-    e.preventDefault();
-    var e = document.getElementById("selectListId");
-    var value = e.value;
-    text = e.options[e.selectedIndex].text;
-    console.log(text);
-    fetch(`/profile/${user_id}`, {
-      method: "PUT",
-      body: JSON.stringify({
-        position: `${text}`,
-      }),
-    }).then((result) => {
-      value = text;
-      element.innerHTML = value;
-      btn.innerHTML = "";
-      btn.append(btnEdit);
-      element.innerHTML = text;
+  console.log(doctor);
+  console.log(doctor.position);
+  fetch(`/available/${doctor.user_id}`)
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      fetch(`reserva/${user_id}`, {
+        method: "PUT",
+        body: JSON.stringify({
+          service: data.doctor.position,
+          doctor: data.doctor.id,
+        }),
+      })
+        .then((response) => response.json())
+        .then((result) => {});
     });
-  });
+  // // var text = e.options[e.selectedIndex].text;
+  // // button.innerHTML = "Save";
+  // // element.innerHTML = "";
+  // // for (var i = 0; i < array.length; i++) {
+  // //   var option = document.createElement("option");
+  // //   option.value = array[i];
+  // //   option.text = array[i];
+  // //   selectList.appendChild(option);
+  // // }
+  // // element.append(selectList);
+  // // selectList.id = "selectListId";
+  // // btn.innerHTML = "";
+  // // btn.append(button);
+  // // const user_id = JSON.parse(document.getElementById("user_id").textContent);
+
+  // // button.addEventListener("click", (e) => {
+  // //   e.preventDefault();
+  // //   var e = document.getElementById("selectListId");
+  // //   var value = e.value;
+  // //   text = e.options[e.selectedIndex].text;
+  // //   console.log(text);
+  // // });
 }
 // function editPatient() {
 //   var element = document.getElementById("editformPatient");

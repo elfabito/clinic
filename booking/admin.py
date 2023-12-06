@@ -9,6 +9,7 @@ class UserAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Appointment)
+admin.site.register(DayTimeAvailable)
 admin.site.register(Doctor)
 admin.site.register(Patient)
 admin.site.register(History)
