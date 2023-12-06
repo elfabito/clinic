@@ -116,7 +116,7 @@ class Doctor(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     position = models.CharField(max_length=100, choices=CHOICES, blank=True)
     employment_date = models.DateTimeField(default=datetime.now)
-    # available = models.OneToOneField(DayTimeAvailable, null=True, on_delete=models.CASCADE)
+    
     
     phone = models.CharField(max_length=17, blank=True)
     
@@ -165,8 +165,7 @@ class DayTimeAvailable(models.Model):
 class Patient(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     gender = models.CharField(choices=GENDER_CHOICES, max_length=128)
-    # phone = models.CharField(max_length=200)
-    
+       
     phone = models.CharField(max_length=17, blank=True)
     date_recorded = models.DateTimeField(default=datetime.now)
 
@@ -187,25 +186,27 @@ class Patient(models.Model):
 
 class Appointment(models.Model):
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, null=True, blank=True)
-    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, null=True, blank=True)
-    service = models.CharField(max_length=50, choices=CHOICES, default="Doctor care")
-    day_ordered = models.DateField(default=datetime.now)
-    # time = models.CharField(max_length=10, choices=TIME_CHOICES, default="3 PM")
-    time = models.IntegerField(choices=TIME_CHOICES)
-    day = models.DateField(max_length=10)
-    time_ordered = models.DateTimeField(default=datetime.now, blank=True)
     phone = models.CharField(max_length=200)
+    doctor = models.CharField(max_length=50)
+    service = models.CharField(max_length=50)
+   
+    datetime = models.DateTimeField(max_length=10, blank=False, null=False)
+    comment = models.TextField( blank=True)
+    time_ordered = models.DateTimeField(null=False, blank=False,auto_now_add=True)
+    
     approved = models.BooleanField(default=False)
     def __str__(self):
-        return f"{self.user.username} | day: {self.day} | time: {self.time}"
+        return f"{self.patient.user.first_name} | day: {self.datetime} | timeorder: {self.time_ordered}"
     def serialize(self):
         return {
-            "user": self.user,
-            "service": self.service,
-            "day" : self.day,
-            "time": self.time,
-            "time_ordered": self.time_ordered,
+            "patient": self.patient.user.first_name,
             "phone": self.phone,
+            "doctor":self.doctor,
+            "service": self.service,
+            "day" : self.datetime,
+            
+            "time_ordered": self.time_ordered,
+            
             "approved": self.approved,
         }
 class History(models.Model):

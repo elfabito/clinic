@@ -99,11 +99,13 @@ function populateDropdown(name, dayOfWeek, availableTimes) {
   const option0 = document.createElement("option");
   timeDropdown.id = `${name} ${dayOfWeek}`;
   option0.textContent = `${days[dayOfWeek]} ${siguienteFecha(dayOfWeek)}`;
+
   timeDropdown.appendChild(option0);
 
   availableTimes.map((time) => {
     const option = document.createElement("option");
     option.value = `${time}`;
+    option.disabled = "disabled";
     option.textContent = `${time}`;
     timeDropdown.appendChild(option);
   });
@@ -162,6 +164,14 @@ function dynamicdropdown(el) {
         }
 
         k.map((doctor) => {
+          document
+            .getElementById("formreserva")
+            .addEventListener("submit", function (e) {
+              e.stopPropagation();
+              e.preventDefault();
+              // Call the dynamicdropdown function here
+              reserva(el, doctor);
+            });
           fetch(`/available/${doctor.user_id}`)
             .then((response) => response.json())
             .then((data) => {
@@ -192,14 +202,6 @@ function dynamicdropdown(el) {
               if (doctoravailable.sabado.length != 0 && esDiferenteDia(6)) {
                 populateDropdown(doctor.first_name, 6, doctoravailable.sabado);
               }
-            });
-          var e = document
-            .getElementById("reserva")
-            .addEventListener("click", function (e) {
-              e.stopPropagation();
-              e.preventDefault();
-              // Call the dynamicdropdown function here
-              reserva(el, doctor);
             });
         });
       } else if (el.value == "quiropraxia") {
@@ -725,6 +727,9 @@ function editPosition() {
 }
 function reserva(el, doctor) {
   var e = document.getElementById("specialist");
+  var date = document.getElementById("id_datetime");
+  var comment = document.getElementById("id_comment");
+  console.log(date.value);
   var value = el.value;
   console.log(value);
   const user_id = JSON.parse(document.getElementById("user_id").textContent);
@@ -733,12 +738,14 @@ function reserva(el, doctor) {
   fetch(`/available/${doctor.user_id}`)
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
-      fetch(`reserva/${user_id}`, {
+      console.log(data.doctor.first_name);
+      fetch(`reserva`, {
         method: "PUT",
         body: JSON.stringify({
           service: data.doctor.position,
-          doctor: data.doctor.id,
+          doctor: data.doctor.first_name,
+          datetime: date.value,
+          comment: comment.value,
         }),
       })
         .then((response) => response.json())

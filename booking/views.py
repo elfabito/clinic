@@ -11,7 +11,7 @@ from .models import *
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from django import forms
-
+from datetime import datetime
 def index(request):
     return render(request, "index.html",{})
 
@@ -215,7 +215,6 @@ def editUser(request, id):
         return JsonResponse({"message": "User register successfully."}, status=201)
     else:
         return render(request, "registerpatient.html")   
-
 class FormPosition(forms.ModelForm):
     class Meta:
         
@@ -223,10 +222,35 @@ class FormPosition(forms.ModelForm):
         fields = ['position']
         onchange="dynamicdropdown(this)"
         widget=forms.Select(attrs={"onchange":'dynamicdropdown(this)'})
-class FormTime(forms.ModelForm):
+# class FormPosition(forms.ModelForm):
+#     class Meta:
+        
+#         model = Doctor
+#         fields = ['position']
+#         onchange="dynamicdropdown(this)"
+#         widget=forms.Select(attrs={"onchange":'dynamicdropdown(this)'})
+# class FormTime(forms.ModelForm):
+#     class Meta:
+#         model = Appointment
+#         fields = ['time']
+class NewForm(forms.ModelForm):
+    def cleaned_data(self):
+        clean = self.cleaned_data['datetime']
     class Meta:
         model = Appointment
-        fields = ['time']
+        fields=['datetime', 'comment']
+        widgets = {
+            
+            'datetime':forms.DateInput(attrs={
+                "class": "form-control",
+                "type": "datetime-local"}),
+            'comment':forms.Textarea(attrs={'class':'form-control rounded-0', 'row':3}),
+    
+            
+            
+        }
+       
+
 @csrf_exempt
 def available(request,id):
     try:
@@ -255,13 +279,12 @@ def available(request,id):
            
             
             lunes = data.get("lunes"),
-            print(lunes)
             martes = data.get("martes"),
             miercoles = data.get("miercoles"),
             jueves = data.get("jueves"),
             viernes = data.get("viernes"),
             sabado = data.get("sabado")
-            print(sabado)
+            
             available.lunes = lunes
             available.martes = martes
             available.miercoles = miercoles
@@ -297,28 +320,57 @@ def perfilDoctor(request):
         return JsonResponse({"error": "No Doctor found with that user."}, status=404)
     
     return render(request, "profiledoctor.html",{"doctor":doctor,"daytime":daytime.serialize() })
+
+@csrf_exempt
 def reserva(request):
         try:
             user = User.objects.get(pk=request.user.id)
             doctor = User.objects.filter(is_doctor=True)
             patient = Patient.objects.get(user=user)
-            kinesiologo = Doctor.objects.filter(position="Kinesiologia")
-            masajista = Doctor.objects.filter(position="Masajista")
-            Quiropraxia = Doctor.objects.filter(position="Quiropraxia")
-            form = FormPosition()
-            # formTime = FormTime()
-            print(f'ASDSADS {kinesiologo.first()}')
+                       
+            form = NewForm()
+            
         except Patient.DoesNotExist:
                 return JsonResponse({"error": "Post not found."}, status=404)
         if request.method == "GET":
             return render(request , "reserva.html", {
                 "patient":patient,
                 "form": form, 
-                # "formTime": formTime, 
-                "k": kinesiologo.first(),
-                "m": masajista,
-                "q": Quiropraxia
+               
                 })
+        elif request.method == "PUT":
+            
+            data = json.loads(request.body)
+        
+            service = data.get("service","")
+            doctor_name = data.get("doctor","")
+            datetime = data.get("datetime")
+            comment = data.get("comment")
+            date = datetime.split("T")
+            
+            doctor = User.objects.get(first_name = doctor_name)
+            doctor_selected = Doctor.objects.get(user=doctor)
+            print(f'doctor {doctor_selected}')
+        
+            # if form.is_valid():
+            #     fecha = form.cleaned_data("datetime")
+            #     comment = form.cleaned_data["comment"]
+            #     print(f'fecha {fecha}')
+            #     print(f'comment {comment}')
+            
+                
+                
+            new_appointment = Appointment.objects.create(
+                patient=patient,
+                comment=comment,
+                service=service,
+                datetime = datetime,
+                doctor=doctor_name,
+                phone=patient.phone
+                )
+            new_appointment.save()
+            
+        return JsonResponse({"message": "Register successfully."}, status=201)
 @csrf_exempt
 def reservaUser(request, id):
     try:
@@ -343,34 +395,7 @@ def reservaUser(request, id):
             "q": Quiropraxia
              })
         # return JsonResponse(appointment.serialize())
-    elif request.method == "PUT":
-        
-        
-        data = json.loads(request.body)
-        doctor_data = data.get("doctor")
-        print(doctor_data)
-        doctor_selected = Doctor.objects.filter(id == doctor_data)
-        print(doctor_selected)
-        service = data.get("service","")
-        print(service)
-        print(doctor)
-        dayOrdered = data.get("dayOrdered","")
-        timeOrdered = data.get("timeOrdered","")
-        timeConsulta = data.get("timeConsulta","")
-        dayConsulta = data.get("dayConsulta")
-        
-        
-        new_appointment = Appointment(
-            patient=patient,
-            doctor = doctor_selected,
-            service=service,
-            timeConsulta=timeConsulta,
-            dayConsulta=dayConsulta, 
-            timeOrdered=timeOrdered, 
-            dayOrderedrdered=dayOrdered,
-            phone=patient.phone
-            )
-        new_appointment.save()
+    
         return HttpResponse(status=204)
         # return HttpResponseRedirect(reverse("index"))
         return JsonResponse({"message": "User register successfully."}, status=201)
