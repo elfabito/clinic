@@ -15,7 +15,9 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+USE_L10N = False
 
+DATE_INPUT_FORMATS = ['%d/%m/%Y']
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -26,7 +28,6 @@ SECRET_KEY = 'django-insecure-*)+2m56zufy+u6*dx=!(w*r)czqj^c27_5s+i%h5982^5d#+%%
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -40,7 +41,7 @@ INSTALLED_APPS = [
     'booking',
     'multiselectfield',
 ]
-AUTH_USER_MODEL = 'booking.User'
+AUTH_USER_MODEL = 'booking.CustomUser'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -109,9 +110,9 @@ LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
 
-USE_I18N = True
+USE_I18N = False
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)

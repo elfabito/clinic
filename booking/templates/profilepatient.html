@@ -18,9 +18,18 @@
 {% if message %}
 <div>{{ message }}</div>
 {% endif %}
-<div class="container">
-    <h2>Profile {{patient.user.first_name}} </h2>
-    <table class="table">
+<div class="container-xl" style=" padding: 25px;">
+
+
+
+    <p class="fs-2">Profile {{patient.user.first_name}} </p>
+    </br>
+    <div>{% if not patient.phone %}
+        <p>Please Fill phone and gender before make an appoinment</p>
+        {%endif%}
+    </div>
+
+    <table class="table table-bordered" style="justify-content: center; text-align: center;">
         <!-- <thead>
             <tr>
                 <th scope="col">#</th>
@@ -33,27 +42,84 @@
             <tr id="tname">
                 <th scope="row">Name :</th>
                 <td id="fname">{{patient.user.first_name}}</td>
-                <td colspan="2" id="nbutton"><button id="buttonEditN" onclick="editFirst()"> Edit </button></td>
+                <td colspan="2" id="nbutton"><button id="buttonEditN" class="btn btn-secondary" onclick="editFirst()">
+                        Edit </button></td>
             </tr>
             <tr id="tlast">
                 <th scope="row">Last Name :</th>
                 <td id="lname">{{patient.user.last_name}}</td>
-                <td colspan="2" id="lbutton"><button id="buttonEditL" onclick="editLast()"> Edit </button></td>
+                <td colspan="2" id="lbutton"><button id="buttonEditL" class="btn btn-secondary" onclick="editLast()">
+                        Edit </button></td>
             </tr>
             <tr id="tgender">
                 <th scope="row">Gender :</th>
                 <td colspan="1" id="gender">{{patient.gender}}</td>
-                <td colspan="2" id="gbutton"><button id="buttonEditG" onclick="editGender()"> Edit </button></td>
+                <td colspan="2" id="gbutton"><button id="buttonEditG" class="btn btn-secondary" onclick="editGender()">
+                        Edit </button></td>
             </tr>
             <tr id=" tphone">
                 <th scope="row">Phone :</th>
                 <td colspan="1" id="pphone">{{patient.phone}}</td>
-                <td colspan="2" id="tbutton"><button id="buttonEdit" onclick="editPhone()"> Edit </button></td>
+                <td colspan="2" id="tbutton"><button id="buttonEdit" class="btn btn-secondary" onclick="editPhone()">
+                        Edit </button></td>
                 <span id="error"></span>
             </tr>
         </tbody>
     </table>
-    <!-- <span class="input-group-text">Gender</span>
+</div>
+<div style="display: flex;flex-wrap: wrap;justify-content: space-between; text-align: center; padding: 25px;">
+    {% if appointment.length != 0 %}
+    {% for appoint in appointment %}
+    {% if appoint.approved %}
+    <div>
+        <div>
+            <div>
+                <div class=" card" style="width: 18rem;margin: 8px;">
+
+
+                    <div class="card-body">
+                        <h5 class="card-title">Reserva de {{appoint.service}} con {{appoint.doctor}}</h5>
+                        <p class="card-text">Comments : {{appoint.comment}}</p>
+                        <p>{{appoint.datetime}}</p>
+                        <a href="#" class="btn btn-primary">Cancel appointmtent</a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        {%endfor%}
+
+        {% for appoint in appointment %}
+        {% if not appoint.approved%}
+        <div>
+
+            <div class=" card" style="width: 18rem;margin: 8px;">
+
+
+                <div class="card-body">
+                    <h6 class="card-title">Reserva de {{appoint.service}} ( Esperando por aprobar... )</h6>
+                    <p class="card-text">Comments : {{appoint.comment}}</p>
+                    <p>{{appoint.datetime}}</p>
+                    <a href="#" class="btn btn-primary">Cancel appointmtent</a>
+
+                </div>
+            </div>
+
+        </div>
+        {% endif %}
+        {%endfor%}
+
+        {%else%}
+
+
+
+        <div> No Appoinment Found </div>
+
+        {%endif%}
+    </div>
+</div>
+<!-- <span class="input-group-text">Gender</span>
     {% if patient.gender %}
     <h6> {{patient.gender}} </h6>
     {% else %}
@@ -65,16 +131,12 @@
     <span class="input-group-text">Phone</span>
     <p> {{patient.phone}} </p>
     <button> Edit</button> -->
-</div>
 
 
 
 
 
 
-
-<div id="div_hclinica"></div>
-<div id="perfil"></div>
 
 
 

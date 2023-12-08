@@ -1,6 +1,6 @@
 from django.db import models
 from datetime import datetime
-from datetime import datetime
+
 from django.contrib.auth.models import User 
 
 from django.contrib.auth.models import AbstractUser
@@ -44,6 +44,7 @@ TIME_CHOICES = (
 # )
 
 class UserManager(BaseUserManager):
+    
     use_in_migrations = True
 
     def _create_user(self, email, password, **extra_fields):
@@ -88,7 +89,8 @@ class UserManager(BaseUserManager):
         }
     
 
-class User(AbstractUser):
+class CustomUser(AbstractUser):
+    
     username = None
     is_doctor = models.BooleanField(default=False)
     is_patient = models.BooleanField(default=False)
@@ -113,7 +115,7 @@ class User(AbstractUser):
 
 
 class Doctor(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
     position = models.CharField(max_length=100, choices=CHOICES, blank=True)
     employment_date = models.DateTimeField(default=datetime.now)
     
@@ -148,7 +150,7 @@ class DayTimeAvailable(models.Model):
     viernes = MultiSelectField(max_choices=3,max_length=33, choices=TIME_CHOICES, blank=True, null=True)
     sabado = MultiSelectField(max_choices=3,max_length=33, choices=TIME_CHOICES, blank=True, null=True)
     def __str__(self):
-        return str(f'HORARIOS DE {self.doctor.user.first_name} // Lunes : {[time for time in self.lunes ]}  Martes : {[time for time in self.martes]} </br> Miercoles : {[time for time in self.miercoles]} </br> Jueves : {[time for time in self.jueves]} </br> Viernes : {[time for time in self.viernes]} </br> Sabado : {[time for time in self.sabado]}' )
+        return f'HORARIOS DE {self.doctor.user.first_name} // Lunes : {[time for time in self.lunes ]}  Martes : {[time for time in self.martes]} </br> Miercoles : {[time for time in self.miercoles]} </br> Jueves : {[time for time in self.jueves]} </br> Viernes : {[time for time in self.viernes]} </br> Sabado : {[time for time in self.sabado]}'
     def serialize(self):
         return {
             "doctor": self.doctor.user.first_name,
@@ -163,7 +165,7 @@ class DayTimeAvailable(models.Model):
         }
     
 class Patient(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
     gender = models.CharField(choices=GENDER_CHOICES, max_length=128)
        
     phone = models.CharField(max_length=17, blank=True)
@@ -185,20 +187,33 @@ class Patient(models.Model):
         }
 
 class Appointment(models.Model):
+    id = models.AutoField(primary_key=True)
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, null=True, blank=True)
     phone = models.CharField(max_length=200)
     doctor = models.CharField(max_length=50)
     service = models.CharField(max_length=50)
    
-    datetime = models.DateTimeField(max_length=10, blank=False, null=False)
+    datetime = models.DateTimeField(blank=False, null=False)
     comment = models.TextField( blank=True)
     time_ordered = models.DateTimeField(null=False, blank=False,auto_now_add=True)
     
     approved = models.BooleanField(default=False)
     def __str__(self):
         return f"{self.patient.user.first_name} | day: {self.datetime} | timeorder: {self.time_ordered}"
+    
+    def algo(self):
+        user = CustomUser.objects.get(first_name = self.doctor)
+        doctor = Doctor.objects.get(user = user)
+        appoint = DayTimeAvailable.objects.filter(doctor=doctor)
+        daytime = self.datetime.split("T")
+        day = daytime[0]
+        time = daytime[1]
+        print(time)
+        print(day)
+        print(appoint)
     def serialize(self):
         return {
+            "id": self.id,
             "patient": self.patient.user.first_name,
             "phone": self.phone,
             "doctor":self.doctor,
@@ -210,7 +225,7 @@ class Appointment(models.Model):
             "approved": self.approved,
         }
 class History(models.Model):
-    patient = models.ForeignKey(User, on_delete=models.CASCADE)
+    patient = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     history = models.TextField()
 
     def __str__(self):

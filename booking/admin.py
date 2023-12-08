@@ -3,9 +3,9 @@ from .models import *
 # Register your models here.
 from .models import User
 
-@admin.register(User)
+@admin.register(CustomUser)
 class UserAdmin(admin.ModelAdmin):
-    pass
+    ordering = ('email',)
 
 
 admin.site.register(Appointment)

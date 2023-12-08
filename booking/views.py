@@ -1,4 +1,5 @@
 import json
+from django.conf import settings
 from django.shortcuts import render
 from django.core.exceptions import ValidationError
 from django.contrib.auth import authenticate, login, logout
@@ -12,6 +13,9 @@ from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from django import forms
 from datetime import datetime
+from dateutil.relativedelta import relativedelta
+import datetime as dt
+HOUR_CHOICES = [(dt.time(hour=x), '{:02d}:00'.format(x)) for x in range(9, 18)]
 def index(request):
     return render(request, "index.html",{})
 
@@ -59,7 +63,7 @@ def registerPatient(request):
 
         # Attempt to create new user
         try:
-            user = User.objects.create_user(email=email, password=password, first_name=first_name, last_name=last_name)
+            user = CustomUser.objects.create_user(email=email, password=password, first_name=first_name, last_name=last_name)
             user.is_patient = True
             user.save()
             patient = Patient.objects.create(user=user)
@@ -69,7 +73,7 @@ def registerPatient(request):
                 "message": "We have a user register with that email."
             })
         login(request, user)
-        return HttpResponseRedirect(reverse("index"))
+        return HttpResponseRedirect(reverse("perfil"))
         # return JsonResponse({"message": "User register successfully."}, status=201)
     else:
         return render(request, "registerpatient.html")
@@ -94,7 +98,7 @@ def registerDoctor(request):
 
         # Attempt to create new user
         try:
-            user = User.objects.create_user(email=email, password=password,first_name=first_name,last_name=last_name)
+            user = CustomUser.objects.create_user(email=email, password=password,first_name=first_name,last_name=last_name)
             user.is_doctor = True
             user.save()
             doctor = Doctor.objects.create(user=user, position=specialist )
@@ -106,7 +110,7 @@ def registerDoctor(request):
                 "message": "We have a user register with that email."
             })
         login(request, user)
-        return HttpResponseRedirect(reverse("index"))
+        return HttpResponseRedirect(reverse("perfil"))
     else:
         return render(request, "registerdoctor.html")    
     
@@ -114,8 +118,9 @@ def registerDoctor(request):
 # Create your views here.
 def perfil(request):
     patient = Patient.objects.get(user=request.user)
+    appointments = Appointment.objects.filter(patient=patient).order_by('datetime')
     doctors = Doctor.objects.all()
-    return render(request, "profilepatient.html",{"patient":patient, "doctors":doctors})
+    return render(request, "profilepatient.html",{"patient":patient,"appointment":appointments,"doctors":doctors})
 
 # def available(request, id):
 #     try:
@@ -131,7 +136,7 @@ def perfil(request):
 def editUser(request, id):
     
     try:
-        user = User.objects.get(pk=id)
+        user = CustomUser.objects.get(pk=id)
         all_doctors = Doctor.objects.all()
         if user.is_patient:
             patient = Patient.objects.get(user=user)
@@ -234,19 +239,49 @@ class FormPosition(forms.ModelForm):
 #         model = Appointment
 #         fields = ['time']
 class NewForm(forms.ModelForm):
+    # class CreateVacancyForm(ModelForm):
+    # deadline = forms.DateTimeField(formats=['%d/%m/%Y %H:%M'],
+    #    widget = forms.DateTimeInput(
+    #       format ='%d/%m/%Y %H:%M',
+    #       attrs=  {'class':'form-control'}))
+    a = forms.DateField(input_formats=settings.DATE_INPUT_FORMATS)
     def cleaned_data(self):
         clean = self.cleaned_data['datetime']
     class Meta:
+        day = datetime.today().strftime('%Y-%m-%d')
+        days = day.split("-")
+        
+        b = str(int(days[2]) + 14)
+        if int(b) < 10:
+          b = f'0{b}'
+        date_week_later = [ days[0], days[1], b]
+        week_later =  ("-").join(date_week_later)
+        c = str(int(days[2]) + 1)
+        if int(c) < 10:
+          c = f'0{c}'
+        date_start = [ days[0], days[1], c]
+        week_start =  ("-").join(date_start)
+        
+        next = '-'.join(days)
+        
+        value = f'{day}T00:00'
+        
         model = Appointment
         fields=['datetime', 'comment']
+        
         widgets = {
             
             'datetime':forms.DateInput(attrs={
+                "name": "dtl",
+                "step": "3600",
                 "class": "form-control",
-                "type": "datetime-local"}),
+                "type": "datetime-local",
+                "value": value,
+                "min": f'{week_start}T00:00',
+                "max": f'{week_later}T00:00'}, format=['%d-%m-%Y']),
             'comment':forms.Textarea(attrs={'class':'form-control rounded-0', 'row':3}),
     
-            
+            # "max": f'{week_later}T00:00'
             
         }
        
@@ -254,7 +289,7 @@ class NewForm(forms.ModelForm):
 @csrf_exempt
 def available(request,id):
     try:
-        user = User.objects.get(pk=id)
+        user = CustomUser.objects.get(pk=id)
         doctor = Doctor.objects.get(user=user)
         all_doctors = Doctor.objects.all()
         if user.is_doctor:
@@ -312,23 +347,27 @@ def available(request,id):
         return HttpResponse(status=204)
 def perfilDoctor(request):
     try:
+        
         doctor = Doctor.objects.get(user=request.user)
+        appointments = Appointment.objects.filter(doctor=doctor.user.first_name).order_by('datetime')
         daytime = DayTimeAvailable.objects.get(doctor=doctor)
         # form = FormAvailable(request.POST)
         # form2 = AvailableForm()
     except Doctor.DoesNotExist:
         return JsonResponse({"error": "No Doctor found with that user."}, status=404)
     
-    return render(request, "profiledoctor.html",{"doctor":doctor,"daytime":daytime.serialize() })
+    return render(request, "profiledoctor.html",{"doctor":doctor,"appointment":appointments,"daytime":daytime.serialize() })
 
 @csrf_exempt
 def reserva(request):
         try:
-            user = User.objects.get(pk=request.user.id)
-            doctor = User.objects.filter(is_doctor=True)
+            user = CustomUser.objects.get(pk=request.user.id)
+            doctor = CustomUser.objects.filter(is_doctor=True)
             patient = Patient.objects.get(user=user)
                        
             form = NewForm()
+            
+            
             
         except Patient.DoesNotExist:
                 return JsonResponse({"error": "Post not found."}, status=404)
@@ -338,69 +377,71 @@ def reserva(request):
                 "form": form, 
                
                 })
-        elif request.method == "PUT":
+        elif request.method == "POST":
             
             data = json.loads(request.body)
-        
+
+            
             service = data.get("service","")
             doctor_name = data.get("doctor","")
             datetime = data.get("datetime")
             comment = data.get("comment")
             date = datetime.split("T")
             
-            doctor = User.objects.get(first_name = doctor_name)
+            doctor = CustomUser.objects.get(first_name = doctor_name)
             doctor_selected = Doctor.objects.get(user=doctor)
             print(f'doctor {doctor_selected}')
-        
-            # if form.is_valid():
-            #     fecha = form.cleaned_data("datetime")
-            #     comment = form.cleaned_data["comment"]
-            #     print(f'fecha {fecha}')
-            #     print(f'comment {comment}')
-            
-                
+                 
                 
             new_appointment = Appointment.objects.create(
                 patient=patient,
                 comment=comment,
                 service=service,
+                
                 datetime = datetime,
                 doctor=doctor_name,
                 phone=patient.phone
                 )
             new_appointment.save()
+            print(new_appointment.algo())
+        
+        elif request.method == "PUT":
+                data = json.loads(request.body)
+                approved = data.get("approved")
+                new_appointment.approved = approved
+                new_appointment.save()
+                # return JsonResponse(appointment.serialize())
             
         return JsonResponse({"message": "Register successfully."}, status=201)
+                # # return HttpResponseRedirect(reverse("index"))
+                # return JsonResponse({"message": "User register successfully."}, status=201)
 @csrf_exempt
 def reservaUser(request, id):
     try:
-        user = User.objects.get(pk=id)
-        doctor = User.objects.filter(is_doctor=True)
-        patient = Patient.objects.get(user=user)
-        kinesiologo = Doctor.objects.filter(position="Kinesiologia")
-        masajista = Doctor.objects.filter(position="Masajista")
-        Quiropraxia = Doctor.objects.filter(position="Quiropraxia")
+        
+        
+        
+        appointment = Appointment.objects.get(pk=id)
         # form = FormPosition()
         # formTime = FormTime()
-        print(f'ASDSADS {kinesiologo.first()}')
+       
     except Patient.DoesNotExist:
         return JsonResponse({"error": "Post not found."}, status=404)
     if request.method == "GET":
-        return render(request , "reserva.html", {
-            "patient":patient,
-            # "form": form, 
-            # "formTime": formTime, 
-            "k": kinesiologo.first(),
-            "m": masajista,
-            "q": Quiropraxia
-             })
+        return JsonResponse(appointment.serialize())
+    elif request.method == "PUT":
+        data = json.loads(request.body)
+        approved = data.get("approved")
+        appointment.approved = approved
+        appointment.save()
         # return JsonResponse(appointment.serialize())
     
         return HttpResponse(status=204)
+    elif request.method == "DELETE":
+        appointment.delete()
         # return HttpResponseRedirect(reverse("index"))
-        return JsonResponse({"message": "User register successfully."}, status=201)
-    else:
-        return render(request, "registerpatient.html")   
+        return JsonResponse({"message": "Appoinment deleted successfully."}, status=201)
+      
     
 def userPanel(request):
     user = request.user

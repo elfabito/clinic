@@ -80,13 +80,13 @@ function siguienteFecha(diaSemana) {
     );
 
     // Devolver la fecha del siguiente día
-    return fechaSiguiente.toLocaleDateString();
+    return fechaSiguiente.toLocaleDateString("en-GB");
   }
 }
 function populateDropdown(name, dayOfWeek, availableTimes) {
   const timeDropdown = document.createElement("select");
   const space = document.createElement("br");
-
+  timeDropdown.className = "btn btn-outline-";
   const days = [
     "Domingo",
     "Lunes",
@@ -97,7 +97,7 @@ function populateDropdown(name, dayOfWeek, availableTimes) {
     "Sabado",
   ];
   const option0 = document.createElement("option");
-  timeDropdown.id = `${name} ${dayOfWeek}`;
+  timeDropdown.id = `${name} ${siguienteFecha(dayOfWeek)}`;
   option0.textContent = `${days[dayOfWeek]} ${siguienteFecha(dayOfWeek)}`;
 
   timeDropdown.appendChild(option0);
@@ -114,11 +114,14 @@ function populateDropdown(name, dayOfWeek, availableTimes) {
   document.getElementById("time").appendChild(timeDropdown);
 }
 function dynamicdropdown(el) {
+  var br = document.createElement("br");
+
   var time = document.getElementById("time");
   // Clear any previous content in the div
   time.innerHTML = "";
+  time.append(br);
   console.log(el.value);
-  fechaActual = new Date();
+  fechaActual = new Date().toLocaleDateString("en-GB");
 
   // Create empty array for filters position of doctors
 
@@ -178,29 +181,30 @@ function dynamicdropdown(el) {
               let doctoravailable = data.available;
 
               let label = document.createElement("div");
-              label.innerHTML = `Horarios de ${doctor.first_name}  `;
+              label.innerHTML = `Horarios Disponibles de  ${doctor.first_name}  `;
               time.appendChild(label);
+              if (doctoravailable.sabado.length != 0 && esDiferenteDia(6)) {
+                populateDropdown(doctor.first_name, 6, doctoravailable.sabado);
+              }
+              if (doctoravailable.viernes.length != 0 && esDiferenteDia(5)) {
+                populateDropdown(doctor.first_name, 5, doctoravailable.viernes);
+              }
+              if (doctoravailable.jueves.length != 0 && esDiferenteDia(4)) {
+                populateDropdown(doctor.first_name, 4, doctoravailable.jueves);
+              }
               if (doctoravailable.lunes.length != 0 && esDiferenteDia(1)) {
                 populateDropdown(doctor.first_name, 1, doctoravailable.lunes);
               }
               if (doctoravailable.martes.length != 0 && esDiferenteDia(2)) {
                 populateDropdown(doctor.first_name, 2, doctoravailable.martes);
               }
+
               if (doctoravailable.miercoles.length != 0 && esDiferenteDia(3)) {
                 populateDropdown(
                   doctor.first_name,
                   3,
                   doctoravailable.miercoles
                 );
-              }
-              if (doctoravailable.jueves.length != 0 && esDiferenteDia(4)) {
-                populateDropdown(doctor.first_name, 4, doctoravailable.jueves);
-              }
-              if (doctoravailable.viernes.length != 0 && esDiferenteDia(5)) {
-                populateDropdown(doctor.first_name, 5, doctoravailable.viernes);
-              }
-              if (doctoravailable.sabado.length != 0 && esDiferenteDia(6)) {
-                populateDropdown(doctor.first_name, 6, doctoravailable.sabado);
               }
             });
         });
@@ -221,7 +225,7 @@ function dynamicdropdown(el) {
               let doctoravailable = data.available;
 
               let label = document.createElement("div");
-              label.innerHTML = `Horarios de ${doctor.first_name}  `;
+              label.innerHTML = `Horarios Disponibles de ${doctor.first_name}  `;
               time.appendChild(label);
               if (doctoravailable.lunes.length != 0 && esDiferenteDia(1)) {
                 populateDropdown(doctor.first_name, 1, doctoravailable.lunes);
@@ -263,7 +267,7 @@ function dynamicdropdown(el) {
               let doctoravailable = data.available;
 
               let label = document.createElement("div");
-              label.innerHTML = `Horarios de ${doctor.first_name}  `;
+              label.innerHTML = `Horarios Disponibles de ${doctor.first_name}  `;
               time.appendChild(label);
               if (doctoravailable.lunes.length != 0 && esDiferenteDia(1)) {
                 populateDropdown(doctor.first_name, 1, doctoravailable.lunes);
@@ -308,7 +312,7 @@ function editPhone() {
   input.value = value;
 
   let button = document.createElement("button");
-
+  button.className = "btn btn-secondary";
   button.innerHTML = "Save";
   element.innerHTML = "";
   element.append(input);
@@ -347,6 +351,7 @@ function editGender() {
   var btnEdit = document.getElementById("buttonEditG");
 
   let button = document.createElement("button");
+  button.className = "btn btn-secondary";
   var selectList = document.createElement("select");
   button.innerHTML = "Save";
   element.innerHTML = "";
@@ -394,7 +399,7 @@ function editDescription() {
   textArea.rows = "4";
   textArea.cols = "40";
   let button = document.createElement("button");
-
+  button.className = "btn btn-secondary";
   button.innerHTML = "Save";
   element.innerHTML = "";
   element.append(textArea);
@@ -435,7 +440,7 @@ function editFirst() {
   input.value = value;
 
   let button = document.createElement("button");
-
+  button.className = "btn btn-secondary";
   button.innerHTML = "Save";
   element.innerHTML = "";
   element.append(input);
@@ -476,7 +481,7 @@ function editLast() {
   input.value = value;
 
   let button = document.createElement("button");
-
+  button.className = "btn btn-secondary";
   button.innerHTML = "Save";
   element.innerHTML = "";
   element.append(input);
@@ -687,7 +692,7 @@ function editPosition() {
   var array = ["Kinesiologia", "Masajista", "Quiropraxia", "Otro"];
   var btn = document.getElementById("pbutton");
   var btnEdit = document.getElementById("buttonEditP");
-
+  button.className = "btn btn-secondary";
   let button = document.createElement("button");
   var selectList = document.createElement("select");
   button.innerHTML = "Save";
@@ -740,7 +745,7 @@ function reserva(el, doctor) {
     .then((data) => {
       console.log(data.doctor.first_name);
       fetch(`reserva`, {
-        method: "PUT",
+        method: "POST",
         body: JSON.stringify({
           service: data.doctor.position,
           doctor: data.doctor.first_name,
@@ -749,7 +754,10 @@ function reserva(el, doctor) {
         }),
       })
         .then((response) => response.json())
-        .then((result) => {});
+        .then((result) => {
+          alert("Appointment successfully");
+          location.href = "profile";
+        });
     });
   // // var text = e.options[e.selectedIndex].text;
   // // button.innerHTML = "Save";
@@ -773,6 +781,24 @@ function reserva(el, doctor) {
   // //   text = e.options[e.selectedIndex].text;
   // //   console.log(text);
   // // });
+}
+
+function approved(id) {
+  fetch(`reserva/${id}`, {
+    method: "PUT",
+    body: JSON.stringify({
+      approved: true,
+    }),
+  }).then((result) => {
+    window.location.reload();
+  });
+}
+function deleteAppoint(id) {
+  fetch(`reserva/${id}`, {
+    method: "DELETE",
+  })
+    .then((res) => res.text()) // or res.json()
+    .then((res) => window.location.reload());
 }
 // function editPatient() {
 //   var element = document.getElementById("editformPatient");

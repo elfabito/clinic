@@ -7,8 +7,8 @@
 {% if message %}
 <div class="container">{{ message }}</div>
 {% endif %}
-<div class="container">
-    <h2>Reserva</h2>
+<div class="container-fluid" style=" padding: 25px;">
+    <p class="fs-2">Reserva</p>
     <form method="POST" enctype="multipart/form-data" id="formreserva">
         {% csrf_token %}
 
@@ -34,7 +34,9 @@
             </br>
             <div class="category_div" id="category_div">
                 <label for="specialist">Seleccione con quien desea la consulta</label>
-                <select class="form-control" id="specialist" name="specialist" onchange="dynamicdropdown(this);">
+                </br>
+                <select class="btn btn-outline-" type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                    id="specialist" name="specialist" onchange="dynamicdropdown(this);">
                     <option value="">---------</option>
                     <option value="kinesiologia">Kinesiologia</option>
                     <option value="masajista">Masajista</option>
@@ -51,11 +53,16 @@
             </br>
 
             <div class="form-group" id="formdrop" name="formdrop">
-                {{form }}
+                {{form.datetime}}
+            </div>
+            </br>
+            <div class="form-group" id="formcomment" name="formcomment">
+                {{form.comment}}
             </div>
 
             <br></br>
 
+           
 
             {% if patient.phone %}
             <input class=" btn btn-primary" type="submit" id="reserva" value="Reservar">
@@ -65,7 +72,7 @@
 
     </form>
     </br>
-    Already have an account? <a href="{% url 'login' %}">Log In here.</a>
+
 </div>
 
 
