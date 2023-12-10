@@ -110,7 +110,7 @@ def registerDoctor(request):
                 "message": "We have a user register with that email."
             })
         login(request, user)
-        return HttpResponseRedirect(reverse("perfil"))
+        return HttpResponseRedirect(reverse("perfildoctor"))
     else:
         return render(request, "registerdoctor.html")    
     
@@ -220,24 +220,7 @@ def editUser(request, id):
         return JsonResponse({"message": "User register successfully."}, status=201)
     else:
         return render(request, "registerpatient.html")   
-class FormPosition(forms.ModelForm):
-    class Meta:
-        
-        model = Doctor
-        fields = ['position']
-        onchange="dynamicdropdown(this)"
-        widget=forms.Select(attrs={"onchange":'dynamicdropdown(this)'})
-# class FormPosition(forms.ModelForm):
-#     class Meta:
-        
-#         model = Doctor
-#         fields = ['position']
-#         onchange="dynamicdropdown(this)"
-#         widget=forms.Select(attrs={"onchange":'dynamicdropdown(this)'})
-# class FormTime(forms.ModelForm):
-#     class Meta:
-#         model = Appointment
-#         fields = ['time']
+
 class NewForm(forms.ModelForm):
     # class CreateVacancyForm(ModelForm):
     # deadline = forms.DateTimeField(formats=['%d/%m/%Y %H:%M'],
@@ -349,7 +332,7 @@ def perfilDoctor(request):
     try:
         
         doctor = Doctor.objects.get(user=request.user)
-        appointments = Appointment.objects.filter(doctor=doctor.user.first_name).order_by('datetime')
+        appointments = Appointment.objects.filter(doctor=doctor).order_by('datetime')
         daytime = DayTimeAvailable.objects.get(doctor=doctor)
         # form = FormAvailable(request.POST)
         # form2 = AvailableForm()
@@ -362,7 +345,7 @@ def perfilDoctor(request):
 def reserva(request):
         try:
             user = CustomUser.objects.get(pk=request.user.id)
-            doctor = CustomUser.objects.filter(is_doctor=True)
+            
             patient = Patient.objects.get(user=user)
                        
             form = NewForm()
@@ -381,16 +364,17 @@ def reserva(request):
             
             data = json.loads(request.body)
 
-            
             service = data.get("service","")
-            doctor_name = data.get("doctor","")
+            doctor = data.get("doctor","")
             datetime = data.get("datetime")
             comment = data.get("comment")
-            date = datetime.split("T")
-            
-            doctor = CustomUser.objects.get(first_name = doctor_name)
+            # date = datetime.split("T")
+            print(doctor['first_name'])
+            name = doctor["first_name"]
+            print(service)
+            doctor = CustomUser.objects.get(pk = doctor["user_id"])
             doctor_selected = Doctor.objects.get(user=doctor)
-            print(f'doctor {doctor_selected}')
+            # print(f'doctor {doctor_selected}')
                  
                 
             new_appointment = Appointment.objects.create(
@@ -399,11 +383,11 @@ def reserva(request):
                 service=service,
                 
                 datetime = datetime,
-                doctor=doctor_name,
+                doctor=doctor_selected  ,
                 phone=patient.phone
                 )
             new_appointment.save()
-            print(new_appointment.algo())
+            
         
         elif request.method == "PUT":
                 data = json.loads(request.body)

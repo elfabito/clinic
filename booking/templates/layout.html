@@ -21,7 +21,7 @@
 
     <nav class="navbar navbar-expand-lg " style="background-color: #e3f2fd; padding: 15px">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Clinica</a>
+            <a class="navbar-brand" href="{% url 'index' %}">Clinica</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -29,9 +29,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" id="inicio" href="{% url 'index' %}">Inicio</a>
-                    </li>
+                    
 
                     {% if user.is_authenticated %}
                     <li class="nav-item dropdown">
@@ -41,10 +39,10 @@
                         </a>
                         <ul class="dropdown-menu">
                             {% if user.is_doctor %}
-                            <li><a class="dropdown-item" href="{% url 'perfildoctor' %}">Actualizar Datos</a></li>
-                            <li><a class="dropdown-item" id="hclinica">Proximas consultas</a></li>
+                            <li><a class="dropdown-item" href="{% url 'perfildoctor' %}">Datos y Consultas</a></li>
+                            <!-- <li><a class="dropdown-item" id="hclinica">Proximas consultas</a></li> -->
                             {%else%}
-                            <li><a class="dropdown-item" href="{% url 'perfil' %}">Actualizar Datos</a></li>
+                            <li><a class="dropdown-item" href="{% url 'perfil' %}">Datos y Consultas</a></li>
                             <li><a class="dropdown-item" id="hclinica">Historia Clinica</a></li>
                             {%endif%}
                             <li>
@@ -55,10 +53,12 @@
                         </ul>
 
                     </li>
+                    {% if not user.is_doctor %}
                     <li class="nav-item">
                         <a class="nav-link active" href="{% url 'reservas' %}" aria-current="page"
-                            id="reservas">Reservas</a>
+                            id="reservas">Reservar</a>
                     </li>
+                    {%endif%}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
                     </li>
@@ -98,6 +98,20 @@
 
     {% endblock %}
 
+   
+    <footer class="text-center" style="background-color: #e3f2fd">
+
+
+        <!-- Copyright -->
+        <div class="text-black text-center p-3" style="background-color: #e3f2fd">
+            © 2023 Copyright:
+            <a class="text-black" href="https://www.desane.com.uy">Desane</a>
+        </div>
+        <!-- Copyright -->
+    </footer>
+    
+
 </body>
+
 
 </html>

@@ -4,3 +4,12 @@
   height: 50vh;
   overflow: hidden;
 }
+body {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+footer {
+  margin-top: auto;
+}

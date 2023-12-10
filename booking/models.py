@@ -190,7 +190,7 @@ class Appointment(models.Model):
     id = models.AutoField(primary_key=True)
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, null=True, blank=True)
     phone = models.CharField(max_length=200)
-    doctor = models.CharField(max_length=50)
+    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, null=True, blank=True)
     service = models.CharField(max_length=50)
    
     datetime = models.DateTimeField(blank=False, null=False)
@@ -201,16 +201,16 @@ class Appointment(models.Model):
     def __str__(self):
         return f"{self.patient.user.first_name} | day: {self.datetime} | timeorder: {self.time_ordered}"
     
-    def algo(self):
-        user = CustomUser.objects.get(first_name = self.doctor)
-        doctor = Doctor.objects.get(user = user)
-        appoint = DayTimeAvailable.objects.filter(doctor=doctor)
-        daytime = self.datetime.split("T")
-        day = daytime[0]
-        time = daytime[1]
-        print(time)
-        print(day)
-        print(appoint)
+    # def algo(self):
+    #     user = CustomUser.objects.get(first_name = self.doctor)
+    #     doctor = Doctor.objects.get(user = user)
+    #     appoint = DayTimeAvailable.objects.filter(doctor=doctor)
+    #     daytime = self.datetime.split("T")
+    #     day = daytime[0]
+    #     time = daytime[1]
+    #     print(time)
+    #     print(day)
+    #     print(appoint)
     def serialize(self):
         return {
             "id": self.id,
