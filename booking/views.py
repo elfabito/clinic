@@ -13,7 +13,7 @@ from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from django import forms
 from datetime import datetime
-from dateutil.relativedelta import relativedelta
+
 import datetime as dt
 HOUR_CHOICES = [(dt.time(hour=x), '{:02d}:00'.format(x)) for x in range(9, 18)]
 def index(request):
