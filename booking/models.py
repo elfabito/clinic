@@ -5,10 +5,11 @@ from django.contrib.auth.models import User
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.base_user import BaseUserManager
 from multiselectfield import MultiSelectField
-
+from django.db.models.signals import post_save
 GENDER_CHOICES = (
     ("Male", "Male"),
     ("Female", "Female"),
@@ -112,7 +113,7 @@ class CustomUser(AbstractUser):
             
         }
     
-
+   
 
 class Doctor(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
@@ -185,7 +186,16 @@ class Patient(models.Model):
             "phone": self.phone,
             
         }
+@receiver(post_save, sender=CustomUser)
+def doctor(sender, instance, created, **kwargs):
+    if created and instance.is_doctor:
+        doctor =Doctor(user=instance)
+        doctor.save()
+    elif created and instance.is_patient:
+        patient = Patient(user=instance)
+        patient.save()
 
+  
 class Appointment(models.Model):
     id = models.AutoField(primary_key=True)
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, null=True, blank=True)
@@ -196,7 +206,7 @@ class Appointment(models.Model):
     datetime = models.DateTimeField(blank=False, null=False)
     comment = models.TextField( blank=True)
     time_ordered = models.DateTimeField(null=False, blank=False,auto_now_add=True)
-    
+    canceled = models.BooleanField(default=False)
     approved = models.BooleanField(default=False)
     def __str__(self):
         return f"{self.patient.user.first_name} | day: {self.datetime} | timeorder: {self.time_ordered}"

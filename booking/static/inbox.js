@@ -739,6 +739,16 @@ function approved(id) {
     window.location.reload();
   });
 }
+function cancelAppoint(id) {
+  fetch(`reserva/${id}`, {
+    method: "PUT",
+    body: JSON.stringify({
+      canceled: true,
+    }),
+  }).then((result) => {
+    window.location.reload();
+  });
+}
 function deleteAppoint(id) {
   fetch(`reserva/${id}`, {
     method: "DELETE",
