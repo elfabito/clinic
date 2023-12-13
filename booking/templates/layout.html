@@ -29,8 +29,10 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    
 
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'alldoctors' %}">Doctors</a>
+                    </li>
                     {% if user.is_authenticated %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"
@@ -98,7 +100,7 @@
 
     {% endblock %}
 
-   
+
     <footer class="text-center" style="background-color: #e3f2fd">
 
 
@@ -109,7 +111,7 @@
         </div>
         <!-- Copyright -->
     </footer>
-    
+
 
 </body>
 

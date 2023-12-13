@@ -465,14 +465,15 @@ function editFirst() {
   button.addEventListener("click", (e) => {
     e.preventDefault();
     let content_new = input.value;
-
+    content_newUpper =
+      content_new.charAt(0).toUpperCase() + content_new.slice(1);
     fetch(`profile/${user_id}`, {
       method: "PUT",
       body: JSON.stringify({
-        first_name: `${content_new}`,
+        first_name: `${content_newUpper}`,
       }),
     }).then((result) => {
-      value = content_new;
+      value = content_newUpper;
       btn.innerHTML = "";
       btn.append(btnEdit);
       element.innerHTML = value;
@@ -500,20 +501,20 @@ function editLast() {
   btn.innerHTML = "";
   btn.append(button);
   const user_id = JSON.parse(document.getElementById("user_id").textContent);
-  // td.append(input);
-  // td.append(space);
+
   button.addEventListener("click", (e) => {
     e.preventDefault();
     let content_new = input.value;
-    console.log(user_id);
-    console.log(content_new);
+    content_newUpper =
+      content_new.charAt(0).toUpperCase() + content_new.slice(1);
+
     fetch(`profile/${user_id}`, {
       method: "PUT",
       body: JSON.stringify({
-        last_name: `${content_new}`,
+        last_name: `${content_newUpper}`,
       }),
     }).then((result) => {
-      value = content_new;
+      value = content_newUpper;
       btn.innerHTML = "";
       btn.append(btnEdit);
       element.innerHTML = value;

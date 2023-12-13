@@ -211,16 +211,7 @@ class Appointment(models.Model):
     def __str__(self):
         return f"{self.patient.user.first_name} | day: {self.datetime} | timeorder: {self.time_ordered}"
     
-    # def algo(self):
-    #     user = CustomUser.objects.get(first_name = self.doctor)
-    #     doctor = Doctor.objects.get(user = user)
-    #     appoint = DayTimeAvailable.objects.filter(doctor=doctor)
-    #     daytime = self.datetime.split("T")
-    #     day = daytime[0]
-    #     time = daytime[1]
-    #     print(time)
-    #     print(day)
-    #     print(appoint)
+   
     def serialize(self):
         return {
             "id": self.id,

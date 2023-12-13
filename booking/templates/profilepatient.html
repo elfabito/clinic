@@ -64,7 +64,7 @@
     </div>
     {% if appointment.length != 0 %}
     {% for appoint in appointment %}
-    {% if appoint.approved %}
+    {% if appoint.approved and not appoint.canceled %}
     <div class="d-flex flex-wrap" style="align-items: center;padding: 25px; text-align: center;">
         <div>
 
@@ -116,10 +116,10 @@
         <h5>Appointments for approve</h5>
     </div>
     {% for appoint in appointment %}
-    {% if not appoint.approved%}
+    {% if not appoint.approved and not appoint.canceled%}
     <div class="d-flex flex-wrap" style="align-items: center;padding: 0 25px 0 25px; text-align: center; ">
 
-        <div style="background-color: brown;">
+        <div style="background-color: rgb(240, 201, 96);">
 
             <div class=" card" style="width: 18rem;margin: 8px">
 
@@ -171,7 +171,35 @@
     <div> No Appoinment Found </div>
 
     {%endif%}
+    <div style="padding: 35px 0 35px 35px">
+        <h5>Canceled Appointments</h5>
+    </div>
+    {% for appoint in appointment %}
+    {% if appoint.canceled %}
+    <div>
+        <div class="d-flex flex-wrap" style="align-items: center;padding: 0 0 25px 25px; text-align: center;">
+            <div style="background-color: brown">
+
+
+                <div class=" card" style="width: 18rem;margin: 8px;">
+
+
+                    <div class="card-body">
+                        <h5 class="card-title">Reserva con {{appoint.doctor}}</h5>
+                        <p class="card-text">Comments : {{appoint.comment}}</p>
+                        <p>{{appoint.datetime}}</p>
+
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
 </div>
+{% endif %}
+{%endfor%}
 </div>
 <!-- <span class="input-group-text">Gender</span>
     {% if patient.gender %}

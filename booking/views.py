@@ -49,9 +49,9 @@ def logout_view(request):
 def registerPatient(request):
     if request.method == "POST":
         
-        first_name = request.POST["first_name"]
-        last_name = request.POST["last_name"]
-        email = request.POST["email"]
+        first_name = request.POST["first_name"].capitalize()
+        last_name = request.POST["last_name"].capitalize()
+        email = request.POST["email"].lower()
 
         # Ensure password matches confirmation
         password = request.POST["password"]
@@ -84,9 +84,9 @@ def registerDoctor(request):
     
     if request.method == "POST":
         specialist = request.POST["specialist"]
-        first_name = request.POST["first_name"]
-        last_name = request.POST["last_name"]
-        email = request.POST["email"]
+        first_name = request.POST["first_name"].capitalize()
+        last_name = request.POST["last_name"].capitalize()
+        email = request.POST["email"].lower()
 
         # Ensure password matches confirmation
         password = request.POST["password"]
@@ -115,23 +115,12 @@ def registerDoctor(request):
         return render(request, "registerdoctor.html")    
     
 
-# Create your views here.
 def perfil(request):
     patient = Patient.objects.get(user=request.user)
     appointments = Appointment.objects.filter(patient=patient).order_by('datetime')
     doctors = Doctor.objects.all()
     return render(request, "profilepatient.html",{"patient":patient,"appointment":appointments,"doctors":doctors})
 
-# def available(request, id):
-#     try:
-#         user = User.objects.get()
-#         doctor = Doctor.objects.get(user=user)
-#         daytime= DayTimeAvailable.objects.get()
-        
-#     except DayTimeAvailable.DoesNotExist:
-#         return JsonResponse({"error": "User not found."}, status=404)
-#     if request.method == "GET":
-#         return JsonResponse(daytime.serialize())
 @csrf_exempt
 def editUser(request, id):
     
@@ -160,9 +149,9 @@ def editUser(request, id):
         
         data = json.loads(request.body)
         if data.get("first_name") is not None:
-                user.first_name = data["first_name"]
+                user.first_name = data["first_name"].capitalize()
         if data.get("last_name") is not None:
-                user.last_name = data["last_name"]
+                user.last_name = data["last_name"].capitalize()
         user.save()
         if user.is_patient == True:
             if data.get("phone") is not None:
@@ -222,11 +211,7 @@ def editUser(request, id):
         return render(request, "registerpatient.html")   
 
 class NewForm(forms.ModelForm):
-    # class CreateVacancyForm(ModelForm):
-    # deadline = forms.DateTimeField(formats=['%d/%m/%Y %H:%M'],
-    #    widget = forms.DateTimeInput(
-    #       format ='%d/%m/%Y %H:%M',
-    #       attrs=  {'class':'form-control'}))
+
     a = forms.DateField(input_formats=settings.DATE_INPUT_FORMATS)
     def cleaned_data(self):
         clean = self.cleaned_data['datetime']
@@ -269,12 +254,15 @@ class NewForm(forms.ModelForm):
         }
        
 
+
+
+
 @csrf_exempt
 def available(request,id):
     try:
         user = CustomUser.objects.get(pk=id)
         doctor = Doctor.objects.get(user=user)
-        all_doctors = Doctor.objects.all()
+        
         if user.is_doctor:
             
             available= DayTimeAvailable.objects.get(doctor=doctor)
@@ -313,18 +301,7 @@ def available(request,id):
             print(available)
             available.save()
             
-            # available = data.getlist("available")
-            # doctor.available = available
-            
-        
-    # elif request.method == "POST":    
-        
-                
-    #             doctor.save()
-    #             return HttpResponse(status=204)
-        
-    #     # Ensure password matches confirmation
-        
+          
         
         
         return HttpResponse(status=204)
@@ -399,16 +376,14 @@ def reserva(request):
         return JsonResponse({"message": "Register successfully."}, status=201)
                 # # return HttpResponseRedirect(reverse("index"))
                 # return JsonResponse({"message": "User register successfully."}, status=201)
+
+
 @csrf_exempt
 def reservaUser(request, id):
     try:
-        
-        
-        
-        appointment = Appointment.objects.get(pk=id)
-        # form = FormPosition()
-        # formTime = FormTime()
-       
+         
+       appointment = Appointment.objects.get(pk=id)
+   
     except Patient.DoesNotExist:
         return JsonResponse({"error": "Post not found."}, status=404)
     if request.method == "GET":
@@ -418,7 +393,7 @@ def reservaUser(request, id):
         approved = data.get("approved")
         appointment.approved = approved
         appointment.save()
-        # return JsonResponse(appointment.serialize())
+        
     
         return HttpResponse(status=204)
     elif request.method == "DELETE":
@@ -426,101 +401,15 @@ def reservaUser(request, id):
         # return HttpResponseRedirect(reverse("index"))
         return JsonResponse({"message": "Appoinment deleted successfully."}, status=201)
       
-    
-def userPanel(request):
-    user = request.user
-    appointments = Appointment.objects.filter(user=user).order_by('day', 'time')
-    return render(request, 'userPanel.html', {
-        'user':user,
-        'appointments':appointments,
-    })
 
 def allDoctors(request):
     doctors = Doctor.objects.all()
     return JsonResponse([doctor.serialize() for doctor in doctors], safe=False)
 
-# TIME_CHOICES = (
-#         (0, '09:00 – 10:00'),
-#         (1, '10:00 – 11:00'),
-#         (2, '11:00 – 12:00'),
-#         (3, '13:00 – 14:00'),
-#         (4, '14:00 – 15:00'),
-#         (5, '15:00 – 16:00'),
-#         (6, '17:00 – 18:00'),
-#         (7, '18:00 – 19:00'),
-#         (8, '19:00 – 20:00'),
-#     )
 
-# class FormAvailable(forms.ModelForm):
-#     class Meta:
-#         model = Doctor
-#         fields = ['available']
-
-# class AvailableForm(forms.Form):
-    
-#     Horarios = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
-#                                           choices=TIME_CHOICES)
-
-# @csrf_exempt
-# def editDoctor(request, id):   
-      
-#     try:
-#         user = User.objects.get(pk=id)
-#         doctor = Doctor.objects.get(user=user)
-#     except Doctor.DoesNotExist:
-#         return JsonResponse({"error": "No Doctor found with that user."}, status=404)
-#     if request.method == "GET":
-#         return JsonResponse(doctor.serialize())
-#     elif request.method == "PUT":
+def doctors(request):
+    doctors = Doctor.objects.all()
+    return render(request, 'doctors.html', {
+        'doctors':doctors,
         
-        
-#         data = json.loads(request.body)
-#         if data.get("phone") is not None:
-#                 doctor.phone = data["phone"]
-        
-#         if data.get("gender") is not None:
-#            doctor.gender = data["gender"]
-#         if data.get("description") is not None:
-#            doctor. description = data[" description"]
-#         # description = data.get("description","")
-#         specialist = data.get("position","")
-#         # doctor.description - description
-#         doctor.position = specialist
-#         doctor.save()
-#         # Ensure password matches confirmation
-        
-       
-        
-#         return HttpResponse(status=204)
-#         # return HttpResponseRedirect(reverse("index"))
-#         return JsonResponse({"message": "User register successfully."}, status=201)
-#     else:
-#         return render(request, "registerdoctor.html")  
-
-# def booking(request):
-#     #Calling 'validWeekday' Function to Loop days you want in the next 21 days:
-#     weekdays = validWeekday(22)
-
-#     #Only show the days that are not full:
-#     validateWeekdays = isWeekdayValid(weekdays)
-    
-
-#     if request.method == 'POST':
-#         service = request.POST.get('service')
-#         day = request.POST.get('day')
-#         if service == None:
-#             messages.success(request, "Please Select A Service!")
-#             return redirect('booking')
-
-#         #Store day and service in django session:
-#         request.session['day'] = day
-#         request.session['service'] = service
-
-#         return redirect('bookingSubmit')
-
-
-#     return render(request, 'booking.html', {
-#             'weekdays':weekdays,
-#             'validateWeekdays':validateWeekdays,
-#         })
-
+    })
