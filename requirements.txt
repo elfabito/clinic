@@ -37,6 +37,7 @@ newsapi-python==0.2.7
 numpy==1.25.1
 pandas==2.0.3
 pigar==2.1.1
+Pillow==10.1.0
 pipenv==2023.9.1
 pipreqs==0.4.13
 platformdirs==3.10.0
