@@ -9,12 +9,13 @@ urlpatterns = [
     path("registerpatient", views.registerPatient, name="registerPatient"),
     path("registerdoctor", views.registerDoctor, name="registerdoctor"),
     path("doctors", views.doctors, name="alldoctors"),
-
+    
     path("profile", views.perfil, name="perfil"),
     path("profile/<int:id>", views.editUser, name="edituser"),
     path("available/<int:id>", views.available, name="available"),
     path("profiledoctor", views.perfilDoctor, name="perfildoctor"),
     path("alldoctors", views.allDoctors, name="doctors"),
+    path("doctor/<int:id>", views.doctor, name="doctor"),
     path("reserva", views.reserva, name="reservas"),
     path("reserva/<int:id>", views.reservaUser, name="reservaUser"),
     # path("available", views.available, name="available"),

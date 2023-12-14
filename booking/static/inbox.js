@@ -734,6 +734,7 @@ function approved(id) {
   fetch(`reserva/${id}`, {
     method: "PUT",
     body: JSON.stringify({
+      canceled: false,
       approved: true,
     }),
   }).then((result) => {
@@ -745,6 +746,7 @@ function cancelAppoint(id) {
     method: "PUT",
     body: JSON.stringify({
       canceled: true,
+      approved: false,
     }),
   }).then((result) => {
     window.location.reload();
@@ -757,6 +759,23 @@ function deleteAppoint(id) {
     .then((response) => response.json()) // or res.json()
     .then((result) => window.location.reload());
 }
+
+function imagedata(id) {
+  image = document.getElementById("choose-file").value;
+
+  console.log(image);
+  fetch(`doctor/${id}`, {
+    method: "PUT",
+    body: JSON.stringify({
+      image: image,
+    }),
+  }).then((result) => {
+    window.location.reload();
+  });
+}
+
+// Display "image" in Local storage as src of img preview even after page refreshes
+
 // function editPatient() {
 //   var element = document.getElementById("editformPatient");
 //   element.addEventListener("submit", (e) => {

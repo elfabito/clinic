@@ -7,210 +7,232 @@
 {% endif %}
 <div class="container-fluid" style=" padding: 35px 35px 0px 25px;">
 
+
     <p class="fs-2">Profile {{doctor.user.first_name}} </p>
-    <table class="table">
-        
-        <tbody>
-            <tr id="tname">
-                <th scope="row">Name :</th>
-                <td id="fname">{{doctor.user.first_name}}</td>
-                <td colspan="2" id="nbutton"><button id="buttonEditN" style="float: right;" class="btn btn-secondary"
-                        onclick="editFirst()">
-                        Edit </button></td>
-            </tr>
-            <tr id="tlast">
-                <th scope="row">Last Name :</th>
-                <td id="lname">{{doctor.user.last_name}}</td>
-                <td colspan="2" id="lbutton"><button id="buttonEditL" style="float: right;" class="btn btn-secondary"
-                        onclick="editLast()">
-                        Edit </button></td>
-            </tr>
-            <tr id="tgender">
-                <th scope="row">Gender :</th>
-                <td colspan="1" id="gender">{{doctor.gender}}</td>
-                <td colspan="2" id="gbutton"><button id="buttonEditG" style="float: right;" class="btn btn-secondary"
-                        onclick="editGender()">
-                        Edit </button></td>
-            </tr>
-            <tr id=" tphone">
-                <th scope="row">Phone :</th>
-                <td colspan="1" id="pphone">{{doctor.phone}}</td>
-                <td colspan="2" id="tbutton"><button id="buttonEdit" style="float: right;" class="btn btn-secondary"
-                        onclick="editPhone()">
-                        Edit </button></td>
 
-            </tr>
+    <div class="row" style="align-items: center; justify-content: center; text-align: center;">
+        <div class="col-sm-4">
+            {% if doctor.image %}
+            <img style="object-fit: cover; height: 350px; width: 350px;" src="{{ doctor.image.url}}" alt="">
+            {%else%}
+            <img style="object-fit: cover; height: 350px; width: 350px;"
+                src="https://imgs.search.brave.com/jLTwrBSRPcoyhBJs1uPbMl500isS1N2O0JlI3BLUQoY/rs:fit:500:0:0/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJzLmNvbS9p/bWFnZXMvZmVhdHVy/ZWQvY29vbC1wcm9m/aWxlLXBpY3R1cmUt/ODdoNDZnY29iamw1/ZTR4dS5qcGc"
+                class="card-img-top" alt="...">
+            {%endif%}
+            <form style="margin: 10px;" method="post" id="formpic" enctype="multipart/form-data">
+                <input type='file' name='imagefile'>
+                <button type="submit">Upload</button>
+            </form>
+        </div>
+        <div class="col-sm-8">
+            <table class="table" style="float: right">
 
-            <tr id=" tavailable">
-                <th scope="row">Available :</th>
+                <br>
+                <img id="imagePreview">
+                <tbody>
+                    <tr id="tname">
+                        <th scope="row">Name :</th>
+                        <td id="fname">{{doctor.user.first_name}}</td>
+                        <td colspan="2" id="nbutton"><button id="buttonEditN" style="float: right;"
+                                class="btn btn-secondary" onclick="editFirst()">
+                                Edit </button></td>
+                    </tr>
+                    <tr id="tlast">
+                        <th scope="row">Last Name :</th>
+                        <td id="lname">{{doctor.user.last_name}}</td>
+                        <td colspan="2" id="lbutton"><button id="buttonEditL" style="float: right;"
+                                class="btn btn-secondary" onclick="editLast()">
+                                Edit </button></td>
+                    </tr>
+                    <tr id="tgender">
+                        <th scope="row">Gender :</th>
+                        <td colspan="1" id="gender">{{doctor.gender}}</td>
+                        <td colspan="2" id="gbutton"><button id="buttonEditG" style="float: right;"
+                                class="btn btn-secondary" onclick="editGender()">
+                                Edit </button></td>
+                    </tr>
+                    <tr id=" tphone">
+                        <th scope="row">Phone :</th>
+                        <td colspan="1" id="pphone">{{doctor.phone}}</td>
+                        <td colspan="2" id="tbutton"><button id="buttonEdit" style="float: right;"
+                                class="btn btn-secondary" onclick="editPhone()">
+                                Edit </button></td>
 
-                <td colspan="1" id="available">
+                    </tr>
 
-                    <div id="availabledata">
-                        {% if daytime.lunes %}
-                        Lunes : {% for time in daytime.lunes %}
-                        {{time | safe }}
-                        &nbsp&nbsp&nbsp
-                        {%endfor%}
-                        <br>
-                        {%endif%}
+                    <tr id=" tavailable">
+                        <th scope="row">Available :</th>
 
-                        {% if daytime.martes %}
-                        Martes : {% for time in daytime.martes %}
-                        {{time | safe }}
-                        &nbsp&nbsp&nbsp
-                        {%endfor%}
-                        <br>
-                        {%endif%}
+                        <td colspan="1" id="available">
 
-                        {% if daytime.miercoles %}
-                        Miercoles : {% for time in daytime.miercoles %}
-                        {{time | safe }}
-                        &nbsp&nbsp&nbsp
-                        {%endfor%}
-                        <br>
-                        {%endif%}
+                            <div id="availabledata">
+                                {% if daytime.lunes %}
+                                Lunes : {% for time in daytime.lunes %}
+                                {{time | safe }}
+                                &nbsp&nbsp&nbsp
+                                {%endfor%}
+                                <br>
+                                {%endif%}
 
-                        {% if daytime.jueves %}
-                        Jueves : {% for time in daytime.jueves %}
-                        {{time | safe }}
-                        &nbsp&nbsp&nbsp
-                        {%endfor%}
-                        <br>
-                        {%endif%}
+                                {% if daytime.martes %}
+                                Martes : {% for time in daytime.martes %}
+                                {{time | safe }}
+                                &nbsp&nbsp&nbsp
+                                {%endfor%}
+                                <br>
+                                {%endif%}
 
-                        {% if daytime.viernes %}
-                        Viernes : {% for time in daytime.viernes %}
-                        {{time | safe }}
-                        &nbsp&nbsp&nbsp
-                        {%endfor%}
-                        <br>
-                        {%endif%}
+                                {% if daytime.miercoles %}
+                                Miercoles : {% for time in daytime.miercoles %}
+                                {{time | safe }}
+                                &nbsp&nbsp&nbsp
+                                {%endfor%}
+                                <br>
+                                {%endif%}
 
-                        {% if daytime.sabado %}
-                        Sabado : {% for time in daytime.sabado %}
-                        {{time | safe }}
-                        &nbsp&nbsp&nbsp
-                        {%endfor%}
+                                {% if daytime.jueves %}
+                                Jueves : {% for time in daytime.jueves %}
+                                {{time | safe }}
+                                &nbsp&nbsp&nbsp
+                                {%endfor%}
+                                <br>
+                                {%endif%}
 
-                        {%endif%}
+                                {% if daytime.viernes %}
+                                Viernes : {% for time in daytime.viernes %}
+                                {{time | safe }}
+                                &nbsp&nbsp&nbsp
+                                {%endfor%}
+                                <br>
+                                {%endif%}
 
+                                {% if daytime.sabado %}
+                                Sabado : {% for time in daytime.sabado %}
+                                {{time | safe }}
+                                &nbsp&nbsp&nbsp
+                                {%endfor%}
 
-                    </div>
-                    <select class="form-select form-select-lg mb-3" style="text-align: center;" multiple name="option"
-                        id="lunes">
-                        <option value="">--Lunes--</option>
-                        <option value="09:00 – 10:00">09:00 – 10:00</option>
-                        <option value="10:00 – 11:00">10:00 – 11:00</option>
-                        <option value="11:00 – 12:00">11:00 – 12:00</option>
-                        <option value="13:00 – 14:00">13:00 – 14:00</option>
-                        <option value="14:00 – 15:00">14:00 – 15:00</option>
-                        <option value="15:00 – 16:00">15:00 – 16:00</option>
-                        <option value="16:00 – 17:00">16:00 – 17:00</option>
-                        <option value="17:00 – 18:00">17:00 – 18:00</option>
-                        <option value="18:00 – 19:00">18:00 – 19:00</option>
-                    </select>
-                    <select class="form-select form-select-lg mb-3" style="text-align: center;" multiple name="optionm"
-                        id="martes">
-                        <option value="">--Martes--</option>
-                        <option value="09:00 – 10:00">09:00 – 10:00</option>
-                        <option value="10:00 – 11:00">10:00 – 11:00</option>
-                        <option value="11:00 – 12:00">11:00 – 12:00</option>
-                        <option value="13:00 – 14:00">13:00 – 14:00</option>
-                        <option value="14:00 – 15:00">14:00 – 15:00</option>
-                        <option value="15:00 – 16:00">15:00 – 16:00</option>
-                        <option value="16:00 – 17:00">16:00 – 17:00</option>
-                        <option value="17:00 – 18:00">17:00 – 18:00</option>
-                        <option value="18:00 – 19:00">18:00 – 19:00</option>
-                    </select>
-                    <select class="form-select form-select-lg mb-3" style="text-align: center;" multiple name="optionmi"
-                        id="miercoles">
-                        <option value="">--Miercoles--</option>
-                        <option value="09:00 – 10:00">09:00 – 10:00</option>
-                        <option value="10:00 – 11:00">10:00 – 11:00</option>
-                        <option value="11:00 – 12:00">11:00 – 12:00</option>
-                        <option value="13:00 – 14:00">13:00 – 14:00</option>
-                        <option value="14:00 – 15:00">14:00 – 15:00</option>
-                        <option value="15:00 – 16:00">15:00 – 16:00</option>
-                        <option value="16:00 – 17:00">16:00 – 17:00</option>
-                        <option value="17:00 – 18:00">17:00 – 18:00</option>
-                        <option value="18:00 – 19:00">18:00 – 19:00</option>
-                    </select>
-                    <select class="form-select form-select-lg mb-3" style="text-align: center;" multiple name="optionj"
-                        id="jueves">
-                        <option value="">--Jueves--</option>
-                        <option value="09:00 – 10:00">09:00 – 10:00</option>
-                        <option value="10:00 – 11:00">10:00 – 11:00</option>
-                        <option value="11:00 – 12:00">11:00 – 12:00</option>
-                        <option value="13:00 – 14:00">13:00 – 14:00</option>
-                        <option value="14:00 – 15:00">14:00 – 15:00</option>
-                        <option value="15:00 – 16:00">15:00 – 16:00</option>
-                        <option value="16:00 – 17:00">16:00 – 17:00</option>
-                        <option value="17:00 – 18:00">17:00 – 18:00</option>
-                        <option value="18:00 – 19:00">18:00 – 19:00</option>
-                    </select>
-                    <select class="form-select form-select-lg mb-3" style="text-align: center;" multiple name="optionv"
-                        id="viernes">
-                        <option value="">--Viernes--</option>
-                        <option value="09:00 – 10:00">09:00 – 10:00</option>
-                        <option value="10:00 – 11:00">10:00 – 11:00</option>
-                        <option value="11:00 – 12:00">11:00 – 12:00</option>
-                        <option value="13:00 – 14:00">13:00 – 14:00</option>
-                        <option value="14:00 – 15:00">14:00 – 15:00</option>
-                        <option value="15:00 – 16:00">15:00 – 16:00</option>
-                        <option value="16:00 – 17:00">16:00 – 17:00</option>
-                        <option value="17:00 – 18:00">17:00 – 18:00</option>
-                        <option value="18:00 – 19:00">18:00 – 19:00</option>
-                    </select>
-                    <select class="form-select form-select-lg mb-3" style="text-align: center;" multiple name="options"
-                        id="sabado">
-                        <option value="">--Sabado--</option>
-                        <option value="09:00 – 10:00">09:00 – 10:00</option>
-                        <option value="10:00 – 11:00">10:00 – 11:00</option>
-                        <option value="11:00 – 12:00">11:00 – 12:00</option>
-                        <option value="13:00 – 14:00">13:00 – 14:00</option>
-                        <option value="14:00 – 15:00">14:00 – 15:00</option>
-                        <option value="15:00 – 16:00">15:00 – 16:00</option>
-                        <option value="16:00 – 17:00">16:00 – 17:00</option>
-                        <option value="17:00 – 18:00">17:00 – 18:00</option>
-                        <option value="18:00 – 19:00">18:00 – 19:00</option>
-                    </select>
-
-                </td>
+                                {%endif%}
 
 
+                            </div>
+                            <select class="form-select form-select-lg mb-3" style="text-align: center;" multiple
+                                name="option" id="lunes">
+                                <option value="">--Lunes--</option>
+                                <option value="09:00 – 10:00">09:00 – 10:00</option>
+                                <option value="10:00 – 11:00">10:00 – 11:00</option>
+                                <option value="11:00 – 12:00">11:00 – 12:00</option>
+                                <option value="13:00 – 14:00">13:00 – 14:00</option>
+                                <option value="14:00 – 15:00">14:00 – 15:00</option>
+                                <option value="15:00 – 16:00">15:00 – 16:00</option>
+                                <option value="16:00 – 17:00">16:00 – 17:00</option>
+                                <option value="17:00 – 18:00">17:00 – 18:00</option>
+                                <option value="18:00 – 19:00">18:00 – 19:00</option>
+                            </select>
+                            <select class="form-select form-select-lg mb-3" style="text-align: center;" multiple
+                                name="optionm" id="martes">
+                                <option value="">--Martes--</option>
+                                <option value="09:00 – 10:00">09:00 – 10:00</option>
+                                <option value="10:00 – 11:00">10:00 – 11:00</option>
+                                <option value="11:00 – 12:00">11:00 – 12:00</option>
+                                <option value="13:00 – 14:00">13:00 – 14:00</option>
+                                <option value="14:00 – 15:00">14:00 – 15:00</option>
+                                <option value="15:00 – 16:00">15:00 – 16:00</option>
+                                <option value="16:00 – 17:00">16:00 – 17:00</option>
+                                <option value="17:00 – 18:00">17:00 – 18:00</option>
+                                <option value="18:00 – 19:00">18:00 – 19:00</option>
+                            </select>
+                            <select class="form-select form-select-lg mb-3" style="text-align: center;" multiple
+                                name="optionmi" id="miercoles">
+                                <option value="">--Miercoles--</option>
+                                <option value="09:00 – 10:00">09:00 – 10:00</option>
+                                <option value="10:00 – 11:00">10:00 – 11:00</option>
+                                <option value="11:00 – 12:00">11:00 – 12:00</option>
+                                <option value="13:00 – 14:00">13:00 – 14:00</option>
+                                <option value="14:00 – 15:00">14:00 – 15:00</option>
+                                <option value="15:00 – 16:00">15:00 – 16:00</option>
+                                <option value="16:00 – 17:00">16:00 – 17:00</option>
+                                <option value="17:00 – 18:00">17:00 – 18:00</option>
+                                <option value="18:00 – 19:00">18:00 – 19:00</option>
+                            </select>
+                            <select class="form-select form-select-lg mb-3" style="text-align: center;" multiple
+                                name="optionj" id="jueves">
+                                <option value="">--Jueves--</option>
+                                <option value="09:00 – 10:00">09:00 – 10:00</option>
+                                <option value="10:00 – 11:00">10:00 – 11:00</option>
+                                <option value="11:00 – 12:00">11:00 – 12:00</option>
+                                <option value="13:00 – 14:00">13:00 – 14:00</option>
+                                <option value="14:00 – 15:00">14:00 – 15:00</option>
+                                <option value="15:00 – 16:00">15:00 – 16:00</option>
+                                <option value="16:00 – 17:00">16:00 – 17:00</option>
+                                <option value="17:00 – 18:00">17:00 – 18:00</option>
+                                <option value="18:00 – 19:00">18:00 – 19:00</option>
+                            </select>
+                            <select class="form-select form-select-lg mb-3" style="text-align: center;" multiple
+                                name="optionv" id="viernes">
+                                <option value="">--Viernes--</option>
+                                <option value="09:00 – 10:00">09:00 – 10:00</option>
+                                <option value="10:00 – 11:00">10:00 – 11:00</option>
+                                <option value="11:00 – 12:00">11:00 – 12:00</option>
+                                <option value="13:00 – 14:00">13:00 – 14:00</option>
+                                <option value="14:00 – 15:00">14:00 – 15:00</option>
+                                <option value="15:00 – 16:00">15:00 – 16:00</option>
+                                <option value="16:00 – 17:00">16:00 – 17:00</option>
+                                <option value="17:00 – 18:00">17:00 – 18:00</option>
+                                <option value="18:00 – 19:00">18:00 – 19:00</option>
+                            </select>
+                            <select class="form-select form-select-lg mb-3" style="text-align: center;" multiple
+                                name="options" id="sabado">
+                                <option value="">--Sabado--</option>
+                                <option value="09:00 – 10:00">09:00 – 10:00</option>
+                                <option value="10:00 – 11:00">10:00 – 11:00</option>
+                                <option value="11:00 – 12:00">11:00 – 12:00</option>
+                                <option value="13:00 – 14:00">13:00 – 14:00</option>
+                                <option value="14:00 – 15:00">14:00 – 15:00</option>
+                                <option value="15:00 – 16:00">15:00 – 16:00</option>
+                                <option value="16:00 – 17:00">16:00 – 17:00</option>
+                                <option value="17:00 – 18:00">17:00 – 18:00</option>
+                                <option value="18:00 – 19:00">18:00 – 19:00</option>
+                            </select>
 
-                <td colspan="2" id="abutton"><button id="buttonEditA" style="float: right;" class="btn btn-secondary"
-                        onclick="editAvailable()"> Edit </button></td>
+                        </td>
 
 
-                <span id="error"></span>
-            </tr>
+
+                        <td colspan="2" id="abutton"><button id="buttonEditA" style="float: right;"
+                                class="btn btn-secondary" onclick="editAvailable()"> Edit </button></td>
 
 
-            <tr id=" tposition">
-                <th scope="row">Position :</th>
-                <td colspan="1" id="position">{{doctor.position}}</td>
-                <td colspan="2" id="pbutton"><button id="buttonEditP" style="float: right;" class="btn btn-secondary"
-                        onclick="editPosition()"> Edit </button></td>
+                        <span id="error"></span>
+                    </tr>
 
 
-            </tr>
-            <tr id=" tdescription">
-                <th scope="row">Description :</th>
-                <td colspan="1" id="description">{{doctor.description}}</td>
-                <td colspan="2" id="dbutton"><button id="buttonEditD" style="float: right;" class="btn btn-secondary"
-                        onclick="editDescription()"> Edit </button></td>
+                    <tr id=" tposition">
+                        <th scope="row">Position :</th>
+                        <td colspan="1" id="position">{{doctor.position}}</td>
+                        <td colspan="2" id="pbutton"><button id="buttonEditP" style="float: right;"
+                                class="btn btn-secondary" onclick="editPosition()"> Edit </button></td>
 
-            </tr>
-        </tbody>
-    </table>
+
+                    </tr>
+                    <tr id=" tdescription">
+                        <th scope="row">Description :</th>
+                        <td colspan="1" id="description">{{doctor.description}}</td>
+                        <td colspan="2" id="dbutton"><button id="buttonEditD" style="float: right;"
+                                class="btn btn-secondary" onclick="editDescription()"> Edit </button></td>
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 <div>
     <div style="padding: 35px 0 35px 35px">
         <h5>Nexts Appointments</h5>
     </div>
-    <div class="d-flex flex-wrap " style=" align-items: center;text-align: center; padding: 25px;">
+    <div class="d-flex flex-wrap "
+        style=" align-items: center;text-align: center; padding: 25px; background-color: beige;">
         {% if appointment.length != 0 %}
         {% for appoint in appointment %}
         {% if appoint.approved and not appoint.canceled %}
@@ -266,7 +288,8 @@
     <div style="padding: 35px 0 35px 35px">
         <h5>Appointments for approve</h5>
     </div>
-    <div class="d-flex flex-wrap " style="align-items: center;padding: 25px;; text-align: center;">
+    <div class="d-flex flex-wrap "
+        style="align-items: center;padding: 25px;; text-align: center; background-color: bisque;">
         {% for appoint in appointment %}
         {% if not appoint.approved and not appoint.canceled%}
 
@@ -302,11 +325,12 @@
     <div style="padding: 35px 0 35px 35px">
         <h5>Canceled Appointments</h5>
     </div>
-    <div class="d-flex flex-wrap" style="align-items: center;padding: 0 0 25px 25px; text-align: center;">
 
-        {% for appoint in appointment %}
-        {% if appoint.canceled %}
-        <div>
+
+    {% for appoint in appointment %}
+    {% if appoint.canceled %}
+    <div>
+        <div class="d-flex flex-wrap" style="align-items: center;padding: 0 0 25px 25px; text-align: center;">
             <div style="background-color: brown">
 
 

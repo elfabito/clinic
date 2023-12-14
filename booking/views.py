@@ -254,7 +254,10 @@ class NewForm(forms.ModelForm):
         }
        
 
-
+class imageForm(forms.ModelForm):
+    class Meta:
+        model = Doctor
+        fields=['image']
 
 
 @csrf_exempt
@@ -305,9 +308,11 @@ def available(request,id):
         
         
         return HttpResponse(status=204)
+
+@csrf_exempt
 def perfilDoctor(request):
     try:
-        
+        form = imageForm()
         doctor = Doctor.objects.get(user=request.user)
         appointments = Appointment.objects.filter(doctor=doctor).order_by('datetime')
         daytime = DayTimeAvailable.objects.get(doctor=doctor)
@@ -315,9 +320,14 @@ def perfilDoctor(request):
         # form2 = AvailableForm()
     except Doctor.DoesNotExist:
         return JsonResponse({"error": "No Doctor found with that user."}, status=404)
-    
-    return render(request, "profiledoctor.html",{"doctor":doctor,"appointment":appointments,"daytime":daytime.serialize() })
-
+    if request.method == "GET":
+        return render(request, "profiledoctor.html",{"doctor":doctor,"form":form,"appointment":appointments,"daytime":daytime.serialize() })
+    elif request.method== "POST":
+        
+        image = request.FILES.get('imagefile')
+        doctor.image = image
+        doctor.save()
+    return HttpResponseRedirect(reverse("perfildoctor"))   
 @csrf_exempt
 def reserva(request):
         try:
@@ -366,11 +376,13 @@ def reserva(request):
             new_appointment.save()
             
         
-        elif request.method == "PUT":
-                data = json.loads(request.body)
-                approved = data.get("approved")
-                new_appointment.approved = approved
-                new_appointment.save()
+        # elif request.method == "PUT":
+        #         data = json.loads(request.body)
+        #         approved = data.get("approved")
+        #         canceled = data.get("canceled")
+        #         new_appointment.canceled = canceled
+        #         new_appointment.approved = approved
+        #         new_appointment.save()
                 # return JsonResponse(appointment.serialize())
             
         return JsonResponse({"message": "Register successfully."}, status=201)
@@ -392,6 +404,8 @@ def reservaUser(request, id):
         data = json.loads(request.body)
         approved = data.get("approved")
         appointment.approved = approved
+        canceled = data.get("canceled")
+        appointment.canceled = canceled
         appointment.save()
         
     
@@ -413,3 +427,17 @@ def doctors(request):
         'doctors':doctors,
         
     })
+def doctor(request,id):
+    try:
+        user = User.objects.get(id =id)
+        doctor = Doctor.objects.get(user = user)
+    except Doctor.DoesNotExist:
+        return JsonResponse({"error": "Post not found."}, status=404)
+    if request.method == "PUT":
+        image = request.FILES.get('image')
+        
+        doctor.image=image
+        doctor.save()
+        
+        
+    

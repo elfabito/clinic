@@ -39,7 +39,8 @@ class CustomUserAdmin(UserAdmin):
                     "groups",
                     "user_permissions",
                     "is_doctor",
-                    "is_patient"
+                    "is_patient",
+                    
                 ),
             },
         ),

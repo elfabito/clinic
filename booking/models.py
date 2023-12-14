@@ -1,3 +1,4 @@
+import json
 from django.db import models
 from datetime import datetime
 
@@ -62,20 +63,20 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('is_superuser', False)
         extra_fields.setdefault('is_patient', False)
         extra_fields.setdefault('is_doctor', False)
-        return self._create_user(email=email, password=password,first_name=first_name, last_name=last_name, **extra_fields)
+        return self._create_user(email=email, password=password,first_name=first_name.capitalize(), last_name=last_name.capitalize(), **extra_fields)
 
     def create_superuser(self, email, password, first_name, last_name, **extra_fields):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
-        extra_fields.setdefault('is_doctor', True)
-        extra_fields.setdefault('is_patient', True)
+        extra_fields.setdefault('is_doctor', False)
+        extra_fields.setdefault('is_patient', False)
 
         if extra_fields.get('is_staff') is not True:
             raise ValueError('Superuser must have is_staff=True.')
         if extra_fields.get('is_superuser') is not True:
             raise ValueError('Superuser must have is_superuser=True.')
 
-        return self._create_user(email=email, password=password,first_name=first_name, last_name=last_name, **extra_fields)
+        return self._create_user(email=email, password=password,first_name=first_name.capitalize(), last_name=last_name.capitalize(), **extra_fields)
    
     def serialize(self):
         return {
@@ -120,7 +121,7 @@ class Doctor(models.Model):
     position = models.CharField(max_length=100, choices=CHOICES, blank=True)
     employment_date = models.DateTimeField(default=datetime.now)
     
-    
+    image = models.ImageField(blank=True, null=True, upload_to="images/")
     phone = models.CharField(max_length=17, blank=True)
     
     description = models.TextField(null=True)
@@ -135,7 +136,7 @@ class Doctor(models.Model):
             "last_name": self.user.last_name,
             "position": self.position,
             "employment_date " : self.employment_date ,
-            
+            "image":json.dumps(str(self.image)),
             "description": self.description,
             "gender": self.gender,
             "phone": self.phone,
@@ -190,6 +191,8 @@ class Patient(models.Model):
 def doctor(sender, instance, created, **kwargs):
     if created and instance.is_doctor:
         doctor =Doctor(user=instance)
+        daytime = DayTimeAvailable(doctor=doctor)
+        daytime.save()
         doctor.save()
     elif created and instance.is_patient:
         patient = Patient(user=instance)
