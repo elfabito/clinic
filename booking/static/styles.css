@@ -13,3 +13,17 @@ body {
 footer {
   margin-top: auto;
 }
+.accordion-item .accordion-button {
+  display: block;
+}
+#name {
+  float: left;
+  justify-content: center;
+  align-items: center;
+}
+#count {
+  float: right;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}

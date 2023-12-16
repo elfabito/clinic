@@ -118,8 +118,11 @@ def registerDoctor(request):
 def perfil(request):
     patient = Patient.objects.get(user=request.user)
     appointments = Appointment.objects.filter(patient=patient).order_by('datetime')
+    approved = appointments.filter(approved=True).count()
+    canceled = appointments.filter(canceled=True).count()
+    forapproved = appointments.count() - approved - canceled
     doctors = Doctor.objects.all()
-    return render(request, "profilepatient.html",{"patient":patient,"appointment":appointments,"doctors":doctors})
+    return render(request, "profilepatient.html",{"patient":patient,"count_approved":approved, "count_canceled": canceled,"count_forapproved":forapproved,"appointment":appointments,"doctors":doctors})
 
 @csrf_exempt
 def editUser(request, id):
@@ -294,16 +297,21 @@ def available(request,id):
 @csrf_exempt
 def perfilDoctor(request):
     try:
+        
         form = imageForm()
         doctor = Doctor.objects.get(user=request.user)
         appointments = Appointment.objects.filter(doctor=doctor).order_by('datetime')
+        
+        approved = appointments.filter(approved=True).count()
+        canceled = appointments.filter(canceled=True).count()
+        forapproved = appointments.count() - approved - canceled
         daytime = DayTimeAvailable.objects.get(doctor=doctor)
         # form = FormAvailable(request.POST)
         # form2 = AvailableForm()
     except Doctor.DoesNotExist:
         return JsonResponse({"error": "No Doctor found with that user."}, status=404)
     if request.method == "GET":
-        return render(request, "profiledoctor.html",{"doctor":doctor,"form":form,"appointment":appointments,"daytime":daytime.serialize() })
+        return render(request, "profiledoctor.html",{"doctor":doctor,"count_approved":approved, "count_canceled": canceled,"count_forapproved":forapproved,"form":form,"appointment":appointments,"daytime":daytime.serialize() })
     elif request.method== "POST":
         
         image = request.FILES.get('imagefile')
