@@ -22,15 +22,15 @@ CHOICES = (
     ("Otro", "Otro"),
     )
 TIME_CHOICES = (
-        (0, '09:00 – 10:00'),
-        (1, '10:00 – 11:00'),
-        (2, '11:00 – 12:00'),
-        (3, '13:00 – 14:00'),
-        (4, '14:00 – 15:00'),
-        (5, '15:00 – 16:00'),
-        (6, '16:00 – 17:00'),
-        (7, '17:00 – 18:00'),
-        (8, '18:00 – 19:00'),
+        ('09:00 – 10:00', '09:00 – 10:00'),
+        ('10:00 – 11:00', '10:00 – 11:00'),
+        ('11:00 – 12:00', '11:00 – 12:00'),
+        ('13:00 – 14:00', '13:00 – 14:00'),
+        ('14:00 – 15:00', '14:00 – 15:00'),
+        ('15:00 – 16:00', '15:00 – 16:00'),
+        ('16:00 – 17:00', '16:00 – 17:00'),
+        ('17:00 – 18:00', '17:00 – 18:00'),
+        ('18:00 – 19:00', '18:00 – 19:00'),
     )
 # TIME_CHOICES = (
 #     ("3 PM", "3 PM"),
@@ -145,12 +145,12 @@ class Doctor(models.Model):
     
 class DayTimeAvailable(models.Model):
     doctor = models.OneToOneField(Doctor, null=True, on_delete=models.CASCADE, related_name="daytime")
-    lunes = MultiSelectField(max_choices=3,max_length=33, choices=TIME_CHOICES, blank=True, null=True)
-    martes = MultiSelectField(max_choices=3,max_length=33, choices=TIME_CHOICES, blank=True, null=True)
-    miercoles = MultiSelectField(max_choices=3,max_length=33, choices=TIME_CHOICES, blank=True, null=True)
-    jueves = MultiSelectField(max_choices=3,max_length=33, choices=TIME_CHOICES, blank=True, null=True)
-    viernes = MultiSelectField(max_choices=3,max_length=33, choices=TIME_CHOICES, blank=True, null=True)
-    sabado = MultiSelectField(max_choices=3,max_length=33, choices=TIME_CHOICES, blank=True, null=True)
+    lunes = MultiSelectField(max_choices=3,max_length=103, choices=TIME_CHOICES, blank=True, null=True)
+    martes = MultiSelectField(max_choices=3,max_length=103, choices=TIME_CHOICES, blank=True, null=True)
+    miercoles = MultiSelectField(max_choices=3,max_length=103, choices=TIME_CHOICES, blank=True, null=True)
+    jueves = MultiSelectField(max_choices=3,max_length=103, choices=TIME_CHOICES, blank=True, null=True)
+    viernes = MultiSelectField(max_choices=3,max_length=103, choices=TIME_CHOICES, blank=True, null=True)
+    sabado = MultiSelectField(max_choices=3,max_length=103, choices=TIME_CHOICES, blank=True, null=True)
     def __str__(self):
         return f'HORARIOS DE {self.doctor.user.first_name} // Lunes : {[time for time in self.lunes ]}  Martes : {[time for time in self.martes]} </br> Miercoles : {[time for time in self.miercoles]} </br> Jueves : {[time for time in self.jueves]} </br> Viernes : {[time for time in self.viernes]} </br> Sabado : {[time for time in self.sabado]}'
     def serialize(self):

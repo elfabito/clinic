@@ -171,38 +171,10 @@ def editUser(request, id):
                 doctor.position = data["position"]
             if data.get("description") is not None:
                 doctor.description = data["description"]
-            
-            # lunes = data.get("lunes"),
-            # print(lunes)
-            # martes = data.get("martes"),
-            # miercoles = data.get("miercoles"),
-            # jueves = data.get("jueves"),
-            # viernes = data.get("viernes"),
-            # sabado = data.get("sabado")
-            # print(sabado)
-            # available.lunes = lunes
-            # available.martes = martes
-            # available.miercoles = miercoles
-            # available.jueves = jueves
-            # available.viernes = viernes
-            # available.sabado = sabado
-            
-            # print(available)
-            # available.save()
-            
-            # available = data.getlist("available")
-            # doctor.available = available
+
             doctor.save()
         
-    # elif request.method == "POST":    
-        
-                
-    #             doctor.save()
-    #             return HttpResponse(status=204)
-        
-    #     # Ensure password matches confirmation
-        
-        
+
         
         return HttpResponse(status=204)
         # return HttpResponseRedirect(reverse("index"))
@@ -259,7 +231,17 @@ class imageForm(forms.ModelForm):
         model = Doctor
         fields=['image']
 
-
+TIME_CHOICES = (
+        (0, '09:00 – 10:00'),
+        (1, '10:00 – 11:00'),
+        (2, '11:00 – 12:00'),
+        (3, '13:00 – 14:00'),
+        (4, '14:00 – 15:00'),
+        (5, '15:00 – 16:00'),
+        (6, '16:00 – 17:00'),
+        (7, '17:00 – 18:00'),
+        (8, '18:00 – 19:00'),
+    )
 @csrf_exempt
 def available(request,id):
     try:
@@ -293,7 +275,7 @@ def available(request,id):
             jueves = data.get("jueves"),
             viernes = data.get("viernes"),
             sabado = data.get("sabado")
-            
+            print(lunes)
             available.lunes = lunes
             available.martes = martes
             available.miercoles = miercoles
@@ -359,10 +341,16 @@ def reserva(request):
             print(doctor['first_name'])
             name = doctor["first_name"]
             print(service)
+            day = datetime.split('-')[1]
+            print(day)
+            
             doctor = CustomUser.objects.get(pk = doctor["user_id"])
             doctor_selected = Doctor.objects.get(user=doctor)
             # print(f'doctor {doctor_selected}')
-                 
+            available = DayTimeAvailable.objects.get(doctor=doctor_selected)
+            x = available.serialize()
+            print(f'AVAILABLE DOCTOR {x}')
+            print(f'RESERVA DATE {datetime}')
                 
             new_appointment = Appointment.objects.create(
                 patient=patient,

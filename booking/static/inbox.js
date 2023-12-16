@@ -277,10 +277,19 @@ function dynamicdropdown(el) {
             .then((response) => response.json())
             .then((data) => {
               let doctoravailable = data.available;
+              let br1 = document.createElement("br");
+              time.appendChild(br1);
+              let label = document.createElement("label");
+              label.innerHTML = `Horarios Disponibles de  ${doctor.first_name}  `;
 
-              let label = document.createElement("div");
-              label.innerHTML = `Horarios Disponibles de ${doctor.first_name}  `;
+              let input = document.createElement("input");
+              input.type = "checkbox";
+              input.id = `${doctor.first_name}`;
+              input.value = `${doctor.first_name}`;
+              label.appendChild(input);
               time.appendChild(label);
+              let br = document.createElement("br");
+              time.appendChild(br);
               if (doctoravailable.lunes.length != 0 && esDiferenteDia(1)) {
                 populateDropdown(doctor.first_name, 1, doctoravailable.lunes);
               }

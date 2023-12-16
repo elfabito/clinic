@@ -284,6 +284,7 @@
 
         {% endif %}
         {%endfor%}
+
     </div>
     <div style="padding: 35px 0 35px 35px">
         <h5>Appointments for approve</h5>
@@ -310,44 +311,45 @@
             </div>
 
 
-            {% endif %}
-            {%endfor%}
+
 
 
         </div>
 
+
+        {% endif %}
+        {%endfor%}
         {%else%}
 
         <div> No Appoinment Found </div>
-
-        {%endif%}
+        {% endif %}
     </div>
     <div style="padding: 35px 0 35px 35px">
         <h5>Canceled Appointments</h5>
     </div>
 
+    <div class="d-flex flex-wrap" style="align-items: center;padding: 0 0 25px 25px; text-align: center;">
 
-    {% for appoint in appointment %}
-    {% if appoint.canceled %}
-    <div>
-        <div class="d-flex flex-wrap" style="align-items: center;padding: 0 0 25px 25px; text-align: center;">
-            <div style="background-color: brown">
-
-
-                <div class=" card" style="width: 18rem;margin: 8px;">
+        {% for appoint in appointment %}
+        {% if appoint.canceled %}
+        <div style="background-color: brown">
 
 
-                    <div class="card-body">
-                        <h5 class="card-title">Reserva de {{appoint.patient}}</h5>
-                        <p class="card-text">Comments : {{appoint.comment}}</p>
-                        <p>{{appoint.datetime}}</p>
-                        <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+
+            <div class=" card" style="width: 18rem;margin: 8px;">
+
+
+                <div class="card-body">
+                    <h5 class="card-title">Reserva de {{appoint.patient}}</h5>
+                    <p class="card-text">Comments : {{appoint.comment}}</p>
+                    <p>{{appoint.datetime}}</p>
+                    <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                             data-bs-target="#exampleModal">
                             Delete Appointment
                         </button>-->
 
-                        <!-- Modal -->
-                        <!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    <!-- Modal -->
+                    <!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                             aria-hidden="true">
                             <div class="modal-dialog">
                                 <div class="modal-content">
@@ -371,13 +373,13 @@
                         </div>-->
 
 
-                    </div>
                 </div>
-
             </div>
-            {% endif %}
-            {%endfor%}
+
         </div>
+        {% endif %}
+        {%endfor%}
+
 
 
     </div>
