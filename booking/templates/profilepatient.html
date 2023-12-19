@@ -1,7 +1,14 @@
 {% extends "layout.html" %}
 {% load static %}
 {% block body %}
-
+{% if messages %}
+{% for message in messages %}
+<div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
+    <div id="msg">{{ message }}</div>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+{% endif %}
 {% if message %}
 <div>{{ message }}</div>
 {% endif %}
@@ -86,7 +93,8 @@
                                 <div class="card-body">
                                     <h5 class="card-title">Reserva con {{appoint.doctor}}</h5>
                                     <p class="card-text">Comments : {{appoint.comment}}</p>
-                                    <p>{{appoint.datetime}}</p>
+                                    <p>{{appoint.datetime|date:"l d F Y"}}</p>
+                                    <p>TIME : {{appoint.datetime|date:"g:i a"}}</p>
                                     <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                         data-bs-target="#exampleModal">
                                         Cancel Appointment
@@ -163,7 +171,8 @@
                                     <h6 class="card-title">Reserva con {{appoint.doctor}}( Esperando por
                                         aprobar... )</h6>
                                     <p class="card-text">Comments : {{appoint.comment}}</p>
-                                    <p>{{appoint.datetime}}</p>
+                                    <p>{{appoint.datetime|date:"l d F Y"}}</p>
+                                    <p>TIME : {{appoint.datetime|date:"g:i a"}}</p>
                                     <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                         data-bs-target="#exampleModal1">
                                         Cancel Appointment
@@ -237,7 +246,8 @@
                                 <div class="card-body">
                                     <h5 class="card-title">Reserva con {{appoint.doctor}}</h5>
                                     <p class="card-text">Comments : {{appoint.comment}}</p>
-                                    <p>{{appoint.datetime}}</p>
+                                    <p>{{appoint.datetime|date:"l d F Y"}}</p>
+                                    <p>TIME : {{appoint.datetime|date:"g:i a"}}</p>
 
 
 

@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
   document.querySelector("#jueves").style.display = "none";
   document.querySelector("#viernes").style.display = "none";
   document.querySelector("#sabado").style.display = "none";
-  document.getElementById("ktime").style.display = "none";
+
   document
     .getElementById("specialist")
     .addEventListener("change", function (e) {
@@ -711,23 +711,28 @@ function reserva(doctor) {
   console.log(doc);
   console.log(typeof doc);
   checkbox = document.getElementById(`${doctor.first_name}`);
-  fetch(`/available/${doctor.user_id}`)
+
+  fetch(`reserva`, {
+    method: "POST",
+    body: JSON.stringify({
+      service: doctor.position,
+      doctor: doctor,
+      datetime: date.value,
+      comment: comment.value,
+    }),
+  })
     .then((response) => response.json())
-    .then((data) => {
-      fetch(`reserva`, {
-        method: "POST",
-        body: JSON.stringify({
-          service: doctor.position,
-          doctor: doctor,
-          datetime: date.value,
-          comment: comment.value,
-        }),
-      })
-        .then((response) => response.json())
-        .then((result) => {
-          alert("Appointment successfully");
-          location.href = "profile";
-        });
+    .then((result) => {
+      // alert("Appointment successfully");
+      // location.href = "profile";
+      // alert(JSON.stringify(result["msg"]));
+      if (result["msg"] == "Register Successfully, wait for approved") {
+        // document.getElementById("msg").innerHTML = result["msg"];
+        location.href = "profile";
+      } else {
+        // document.getElementById("msg").innerHTML = result["msg"];
+        window.location.reload();
+      }
     });
 
   // document

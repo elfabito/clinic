@@ -4,7 +4,7 @@ from django.shortcuts import render
 from django.core.exceptions import ValidationError
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import Http404, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import  redirect, render
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
@@ -12,7 +12,8 @@ from .models import *
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from django import forms
-from datetime import datetime
+from datetime import datetime , date
+from django.http import JsonResponse
 
 import datetime as dt
 HOUR_CHOICES = [(dt.time(hour=x), '{:02d}:00'.format(x)) for x in range(9, 18)]
@@ -278,7 +279,7 @@ def available(request,id):
             jueves = data.get("jueves"),
             viernes = data.get("viernes"),
             sabado = data.get("sabado")
-            print(lunes)
+            
             available.lunes = lunes
             available.martes = martes
             available.miercoles = miercoles
@@ -297,17 +298,15 @@ def available(request,id):
 @csrf_exempt
 def perfilDoctor(request):
     try:
-        
         form = imageForm()
         doctor = Doctor.objects.get(user=request.user)
         appointments = Appointment.objects.filter(doctor=doctor).order_by('datetime')
-        
+        print(appointments)
         approved = appointments.filter(approved=True).count()
         canceled = appointments.filter(canceled=True).count()
         forapproved = appointments.count() - approved - canceled
         daytime = DayTimeAvailable.objects.get(doctor=doctor)
-        # form = FormAvailable(request.POST)
-        # form2 = AvailableForm()
+       
     except Doctor.DoesNotExist:
         return JsonResponse({"error": "No Doctor found with that user."}, status=404)
     if request.method == "GET":
@@ -343,35 +342,87 @@ def reserva(request):
 
             service = data.get("service","")
             doctor = data.get("doctor","")
-            datetime = data.get("datetime")
+            datetimeget = data.get("datetime")
             comment = data.get("comment")
             # date = datetime.split("T")
-            print(doctor['first_name'])
+            print(f'DATETIMEGET {datetimeget}')
             name = doctor["first_name"]
             print(service)
-            day = datetime.split('-')[1]
-            print(day)
-            
+            day = datetimeget.split('-')[1]
+            print(f'DATETIME DAY {datetime}')
+            now = datetime.now()
+            print(f'NOW {now.strftime("%A")}')
             doctor = CustomUser.objects.get(pk = doctor["user_id"])
             doctor_selected = Doctor.objects.get(user=doctor)
             # print(f'doctor {doctor_selected}')
             available = DayTimeAvailable.objects.get(doctor=doctor_selected)
             x = available.serialize()
             print(f'AVAILABLE DOCTOR {x}')
-            print(f'RESERVA DATE {datetime}')
-                
-            new_appointment = Appointment.objects.create(
-                patient=patient,
-                comment=comment,
-                service=service,
-                
-                datetime = datetime,
-                doctor=doctor_selected  ,
-                phone=patient.phone
-                )
-            new_appointment.save()
+            print(f'RESERVA DATE {datetimeget}')
+            day = datetimeget.split("-")[2]
+            dayg = day.split("T")[0]
+            timeselected = day.split("T")[1]
+            print(f'TIME SELECTED {timeselected}')
+            dateselected= date(int(datetimeget.split('-')[0]), int(datetimeget.split('-')[1]),int(dayg) )
+            nameDay =  dateselected.strftime("%A")  
+            print(f'NAME OF DAY SELECTED {nameDay}')
+            if nameDay == "Sunday":
+                nameDay = "domingo"
+            elif nameDay == "Monday":
+                nameDay = "lunes"
+            elif nameDay == "Tuesday":
+                nameDay = "martes"
+            elif nameDay == "Wednesday":
+                nameDay= "miercoles"
+            elif nameDay == "Thursday":
+                nameDay = "jueves"
+            elif nameDay == "Friday":
+                nameDay = "viernes"
+            elif nameDay == "Saturday":
+                nameDay = "sabado"
+            print(nameDay)
             
-        
+           
+            a = 0
+            b = 0
+            availableZerialize  = available.serialize()
+            print(f' IN AVAILABLE DAY {availableZerialize[nameDay]}')
+            for i in availableZerialize[nameDay]:
+                
+                if timeselected in i:
+                    a += 1
+                    print("YES")
+                    
+                    
+                else:
+                    print("ERROR")
+                    b += 1
+                    
+                    
+                #     return render(request, "reserva.html", {
+                #     "message": "Invalid date time for that doctor."
+                # })
+            
+            if a > b:
+                new_appointment = Appointment.objects.create(
+                    patient=patient,
+                    comment=comment,
+                    service=service,
+                    
+                    datetime = datetimeget,
+                    doctor=doctor_selected  ,
+                    phone=patient.phone
+                    )
+                new_appointment.save()
+                messages.success(request, message= 'Register Successfully, wait for approved')
+                return JsonResponse({"msg": 'Register Successfully, wait for approved'}, status=404)
+            else:
+                messages.warning(request, message= 'You should put the date an hr available for the doctor selected')
+                # messages.warning(request, message= 'You should put the date an hr available for the doctor selected')
+                return JsonResponse({"msg": 'You should put the date an hr available for the doctor selected'}, status=404)
+            
+            
+            
         # elif request.method == "PUT":
         #         data = json.loads(request.body)
         #         approved = data.get("approved")
@@ -381,7 +432,7 @@ def reserva(request):
         #         new_appointment.save()
                 # return JsonResponse(appointment.serialize())
             
-        return JsonResponse({"message": "Register successfully."}, status=201)
+        
                 # # return HttpResponseRedirect(reverse("index"))
                 # return JsonResponse({"message": "User register successfully."}, status=201)
 

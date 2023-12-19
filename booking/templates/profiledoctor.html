@@ -5,13 +5,14 @@
 {% if message %}
 <div>{{ message }}</div>
 {% endif %}
+
 <div class="container-fluid" style=" padding: 35px 35px 0px 25px;">
 
 
     <p class="fs-2">Profile {{doctor.user.first_name}} </p>
 
     <div class="row" style="align-items: center; justify-content: center; text-align: center;">
-        <div class="col-sm-4">
+        <div class="col-md-4 col-sm-12">
             {% if doctor.image %}
             <img style="object-fit: cover; height: 350px; width: 350px;" src="{{ doctor.image.url}}" alt="">
             {%else%}
@@ -19,7 +20,7 @@
                 src="https://imgs.search.brave.com/jLTwrBSRPcoyhBJs1uPbMl500isS1N2O0JlI3BLUQoY/rs:fit:500:0:0/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJzLmNvbS9p/bWFnZXMvZmVhdHVy/ZWQvY29vbC1wcm9m/aWxlLXBpY3R1cmUt/ODdoNDZnY29iamw1/ZTR4dS5qcGc"
                 class="card-img-top" alt="...">
             {%endif%}
-            <form style="margin: 10px;" method="post" id="formpic" enctype="multipart/form-data">
+            <form style="margin: 20px;" method="post" id="formpic" enctype="multipart/form-data">
                 <input type='file' name='imagefile'>
                 <button type="submit">Upload</button>
             </form>
@@ -257,7 +258,8 @@
                                     <p class="card-text">Patient Phone : {{appoint.patient.phone}}</p>
                                     <p class="card-text">Patient email : {{appoint.patient.user.email}}</p>
                                     <p class="card-text">Comments : {{appoint.comment}}</p>
-                                    <p>{{appoint.datetime}}</p>
+                                    <p>{{appoint.datetime|date:"l d F Y"}}</p>
+                                    <p>TIME : {{appoint.datetime|date:"g:i a"}}</p>
                                     <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                         data-bs-target="#exampleModal">
                                         Cancel Appointment
@@ -329,7 +331,8 @@
                                     <p class="card-text">Patient Phone : {{appoint.patient.phone}}</p>
                                     <p class="card-text">Patient email : {{appoint.patient.user.email}}</p>
                                     <p class="card-text">Comments : {{appoint.comment}}</p>
-                                    <p>{{appoint.datetime}}</p>
+                                    <p>{{appoint.datetime|date:"l d F Y"}}</p>
+                                    <p>TIME : {{appoint.datetime|date:"g:i a"}}</p>
                                     <a onclick="approved({{appoint.id}})" class="btn btn-primary">Approve
                                         appointmtent</a>
 
@@ -378,7 +381,8 @@
                                 <div class="card-body">
                                     <h5 class="card-title">Reserva de {{appoint.patient}}</h5>
                                     <p class="card-text">Comments : {{appoint.comment}}</p>
-                                    <p>{{appoint.datetime}}</p>
+                                    <p>{{appoint.datetime|date:"l d F Y"}}</p>
+                                    <p>TIME : {{appoint.datetime|date:"g:i a"}}</p>
                                     <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                             data-bs-target="#exampleModal">
                                             Delete Appointment
