@@ -19,19 +19,19 @@
 {% endif %} -->
 
 <div class="container-fluid" style=" padding: 25px;">
-    <p class="fs-2">Reserva</p>
+    <p class="fs-2">Booking</p>
     <form method="POST" enctype="multipart/form-data" id="formreserva">
         {% csrf_token %}
 
         <div class="form-group">
             </br>
-            <p>Nombre y Apellido : {{patient.user.first_name}} {{patient.user.last_name}} </p>
+            <p>Full Name : {{patient.user.first_name}} {{patient.user.last_name}} </p>
         </div>
         <div class="form-group">
 
 
             {% if patient.phone %}
-            <p>Numero de contacto : {{patient.phone}} </p>
+            <p>Phone : {{patient.phone}} </p>
             {%else %}
             <p> You must update your Profile before make an appointment</p>
             {% endif%}
@@ -44,7 +44,7 @@
         <div>
             </br>
             <div class="category_div" id="category_div">
-                <label for="specialist">Seleccione con quien desea la consulta</label>
+                <label for="specialist">Select who you want the consultation with</label>
                 </br>
                 <select class="btn btn-outline-" type="button" data-bs-toggle="dropdown" aria-expanded="false"
                     id="specialist" name="specialist" onchange="dynamicdropdown(this);">
@@ -63,9 +63,11 @@
 
             </br>
 
-            <div class="form-group" id="formdrop" name="formdrop">
+            <!-- <div class="form-group" id="formdrop" name="formdrop">
                 {{form.datetime}}
             </div>
+            </br> -->
+            <span>Comments</span>
             </br>
             <div class="form-group" id="formcomment" name="formcomment">
                 {{form.comment}}

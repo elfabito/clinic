@@ -360,66 +360,68 @@ def reserva(request):
             print(f'AVAILABLE DOCTOR {x}')
             print(f'RESERVA DATE {datetimeget}')
             day = datetimeget.split("-")[2]
-            dayg = day.split("T")[0]
-            timeselected = day.split("T")[1]
+            dayg = day.split(" ")[0]
+            print(day)
+            print(dayg)
+            timeselected = day.split(" ")[1]
             print(f'TIME SELECTED {timeselected}')
             dateselected= date(int(datetimeget.split('-')[0]), int(datetimeget.split('-')[1]),int(dayg) )
-            nameDay =  dateselected.strftime("%A")  
-            print(f'NAME OF DAY SELECTED {nameDay}')
-            if nameDay == "Sunday":
-                nameDay = "domingo"
-            elif nameDay == "Monday":
-                nameDay = "lunes"
-            elif nameDay == "Tuesday":
-                nameDay = "martes"
-            elif nameDay == "Wednesday":
-                nameDay= "miercoles"
-            elif nameDay == "Thursday":
-                nameDay = "jueves"
-            elif nameDay == "Friday":
-                nameDay = "viernes"
-            elif nameDay == "Saturday":
-                nameDay = "sabado"
-            print(nameDay)
+            # nameDay =  dateselected.strftime("%A")  
+            # print(f'NAME OF DAY SELECTED {nameDay}')
+            # if nameDay == "Sunday":
+            #     nameDay = "domingo"
+            # elif nameDay == "Monday":
+            #     nameDay = "lunes"
+            # elif nameDay == "Tuesday":
+            #     nameDay = "martes"
+            # elif nameDay == "Wednesday":
+            #     nameDay= "miercoles"
+            # elif nameDay == "Thursday":
+            #     nameDay = "jueves"
+            # elif nameDay == "Friday":
+            #     nameDay = "viernes"
+            # elif nameDay == "Saturday":
+            #     nameDay = "sabado"
+            # print(nameDay)
             
            
-            a = 0
-            b = 0
-            availableZerialize  = available.serialize()
-            print(f' IN AVAILABLE DAY {availableZerialize[nameDay]}')
-            for i in availableZerialize[nameDay]:
+            # a = 0
+            # b = 0
+            # availableZerialize  = available.serialize()
+            # print(f' IN AVAILABLE DAY {availableZerialize[nameDay]}')
+            # for i in availableZerialize[nameDay]:
                 
-                if timeselected in i:
-                    a += 1
-                    print("YES")
+            #     if timeselected in i:
+            #         a += 1
+            #         print("YES")
                     
                     
-                else:
-                    print("ERROR")
-                    b += 1
+            #     else:
+            #         print("ERROR")
+            #         b += 1
                     
                     
-                #     return render(request, "reserva.html", {
-                #     "message": "Invalid date time for that doctor."
-                # })
+            #     #     return render(request, "reserva.html", {
+            #     #     "message": "Invalid date time for that doctor."
+            #     # })
             
-            if a > b:
-                new_appointment = Appointment.objects.create(
-                    patient=patient,
-                    comment=comment,
-                    service=service,
-                    
-                    datetime = datetimeget,
-                    doctor=doctor_selected  ,
-                    phone=patient.phone
-                    )
-                new_appointment.save()
-                messages.success(request, message= 'Register Successfully, wait for approved')
-                return JsonResponse({"msg": 'Register Successfully, wait for approved'}, status=404)
-            else:
-                messages.warning(request, message= 'You should put the date an hr available for the doctor selected')
-                # messages.warning(request, message= 'You should put the date an hr available for the doctor selected')
-                return JsonResponse({"msg": 'You should put the date an hr available for the doctor selected'}, status=404)
+            # if a > b:
+            new_appointment = Appointment.objects.create(
+                patient=patient,
+                comment=comment,
+                service=service,
+                
+                datetime = datetimeget,
+                doctor=doctor_selected  ,
+                phone=patient.phone
+                )
+            new_appointment.save()
+            messages.success(request, message= 'Register Successfully, wait for approved')
+            return JsonResponse({"msg": 'Register Successfully, wait for approved'}, status=404)
+            # else:
+            #     messages.warning(request, message= 'You should put the date an hr available for the doctor selected')
+            #     # messages.warning(request, message= 'You should put the date an hr available for the doctor selected')
+            #     return JsonResponse({"msg": 'You should put the date an hr available for the doctor selected'}, status=404)
             
             
             
@@ -470,8 +472,10 @@ def allDoctors(request):
 
 def doctors(request):
     doctors = Doctor.objects.all()
+    available = DayTimeAvailable.objects.all()
     return render(request, 'doctors.html', {
         'doctors':doctors,
+        'available': available
         
     })
 def doctor(request,id):

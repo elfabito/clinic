@@ -1,16 +1,15 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<div class="container-fluid" style=" padding: 35px">
+<div class="container-fluid" style=" padding: 35px ">
     <p class="fs-2">Our Team </p>
-    <div class="d-flex flex-wrap">
+    <div class="d-flex flex-wrap" style="justify-content: center;">
 
         </br>
         {% for doctor in doctors %}
 
-
-        <div style="align-items: center; text-align: center; padding: 25px 25px 0 0px;">
-            <div class="card" style=" width: 18rem; height: 600px;">
+        <div style="align-items: center; text-align: center; padding: 25px 0px 0 0px; ">
+            <div class="card" style=" width: 18rem; height: auto">
                 {% if doctor.image %}
                 <img height="300" width="300" src="{{doctor.image.url}}" class="card-img-top" alt="...">
                 {%else%}
@@ -25,15 +24,66 @@
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">{{doctor.position}}</li>
-                    <li class="list-group-item">{{doctor.available}}</li>
-                    <li class="list-group-item">A third item</li>
+                    <li class="list-group-item">{{doctor.phone}}</li>
+                    <li class="list-group-item" style="height: 50px;"></li>
+                    {% for doctortime in available %}
+
+                    {% if doctortime.doctor.user.first_name == doctor.user.first_name %}
+                    {% if doctortime.lunes %}
+                    <li class=" list-group-item" style="background-color: rgb(243, 231, 217);">Lunes</li>
+                    {% for time in doctortime.lunes %}
+                    <li class="list-group-item">{{time}}</li>
+                    {%endfor%}
+                    {%endif%}
+
+                    {% if doctortime.martes %}
+                    <li class="list-group-item" style="background-color: rgb(243, 231, 217);">Martes</li>
+                    {% for time in doctortime.martes %}
+                    <li class="list-group-item">{{time}}</li>
+                    {%endfor%}
+                    {%endif%}
+
+                    {% if doctortime.miercoles %}
+                    <li class="list-group-item" style="background-color: rgb(243, 231, 217);">Miercoles</li>
+                    {% for time in doctortime.miercoles %}
+                    <li class="list-group-item">{{time}}</li>
+                    {%endfor%}
+                    {%endif%}
+
+                    {% if doctortime.jueves %}
+                    <li class="list-group-item" style="background-color: rgb(243, 231, 217);">Jueves</li>
+                    {% for time in doctortime.jueves %}
+                    <li class="list-group-item">{{time}}</li>
+                    {%endfor%}
+                    {%endif%}
+
+                    {% if doctortime.viernes %}
+                    <li class="list-group-item" style="background-color: rgb(243, 231, 217);">Viernes</li>
+                    {% for time in doctortime.viernes %}
+                    <li class="list-group-item">{{time}}</li>
+                    {%endfor%}
+                    {%endif%}
+
+                    {% if doctortime.sabado %}
+                    <li class="list-group-item" style="background-color: rgb(243, 231, 217);">Sabado</li>
+                    {% for time in doctortime.sabado %}
+                    <li class="list-group-item">{{time}}</li>
+                    {%endfor%}
+                    {%endif%}
+                    {% endif %}
+                    {%endfor%}
+
+
+
                 </ul>
+
                 <!-- <div class="card-body">
         <a href="#" class="card-link">Card link</a>
         <a href="#" class="card-link">Another link</a>
     </div> -->
             </div>
         </div>
+
         {%endfor%}
     </div>
 </div>
