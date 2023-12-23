@@ -20,7 +20,7 @@ The stringent appointment scheduling logic, including restrictions on same-day b
 
 The creation of a dedicated page showcasing registered therapists' profiles offers a centralized resource for users seeking healthcare services. This feature allows patients to explore and select therapists based on detailed information and professional backgrounds, streamlining the decision-making process.
 
-#Complexity:
+# Complexity:
 
 * **Role-Based Functionalities:
 
