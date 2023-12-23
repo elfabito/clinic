@@ -1,44 +1,44 @@
 # Distinctiveness:
 
-- \*\* Focused Healthcare Platform:
+* **Focused Healthcare Platform:
 
 Your application's primary emphasis on healthcare services, particularly doctor-patient interactions and appointments, sets it apart. This specialization caters exclusively to medical engagements, ensuring a tailored and relevant user experience within the healthcare domain.
 
-- \*\* Role-Based Differentiation:
+* **Role-Based Differentiation:
 
 The clear distinction between patients and doctors, each with dedicated profiles and unique functionalities, provides specialized tools for respective user roles. This differentiation ensures that the platform serves the specific needs of patients seeking healthcare and doctors providing medical services.
 
-- \*\* Specialized Doctor Profiles:
+* **Specialized Doctor Profiles:
 
 The inclusion of doctor-specific details such as picture profiles, unique positions (Kinesiology, Quiropractiq, Massage, Other), and descriptive comments distinguishes the application. These details enhance the professional credibility of doctors and empower patients with comprehensive information for informed decision-making.
 
-- \*\* Strategic Appointment Workflow:
+* **Strategic Appointment Workflow:
 
 The stringent appointment scheduling logic, including restrictions on same-day bookings and mandatory profile completion before bookings, demonstrates a commitment to reliable healthcare interactions. This prioritizes accuracy and trustworthiness in appointments.
 
-- \*\* Professional Directory Page:
+* **Professional Directory Page:
 
 The creation of a dedicated page showcasing registered therapists' profiles offers a centralized resource for users seeking healthcare services. This feature allows patients to explore and select therapists based on detailed information and professional backgrounds, streamlining the decision-making process.
 
 #Complexity:
 
-- \*\*Role-Based Functionalities:
+* **Role-Based Functionalities:
 
 Implementing role-specific actions such as appointment booking for patients, doctor approval processes, and mutual cancellation options increases system complexity. This ensures controlled and specialized interactions based on user roles.
 
-- \*\* Appointment Workflow Logic:
+* **Appointment Workflow Logic:
 
 The intricate appointment scheduling system, involving date restrictions, mandatory profile completion, and doctor approval, adds complexity. This robust system ensures a reliable and organized appointment management process.
 
-- \*\* User Profile Customization:
+* **User Profile Customization:
 
 Allowing users to manage their profiles with different sets of fields (common fields for both, specialized fields for doctors) adds complexity. This customization ensures personalized experiences for users while maintaining professionalism.
 
-- \*\* Doctor Availability Calculation:
+* **Doctor Availability Calculation:
 
 Calculating available dates based on the selected position and the doctor's specified available times increases system complexity. This feature ensures that patients can only book appointments within specific date ranges and available slots based on the therapist's schedule.
 
-- \*\* User Dashboard Segmentation:
+* **User Dashboard Segmentation:
 
 Offering segmented sections within user profiles for different appointment statuses (next appointments, approved, canceled) increases system complexity. This feature enhances user control over appointment management.
 
