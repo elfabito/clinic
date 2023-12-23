@@ -2,7 +2,7 @@
 
 * **Focused Healthcare Platform:**
 
-Your application's primary emphasis on healthcare services, particularly doctor-patient interactions and appointments, sets it apart. This specialization caters exclusively to medical engagements, ensuring a tailored and relevant user experience within the healthcare domain.
+The application's primary emphasis on healthcare services, particularly doctor-patient interactions and appointments, sets it apart. This specialization caters exclusively to medical engagements, ensuring a tailored and relevant user experience within the healthcare domain.
 
 * **Role-Based Differentiation:**
 
@@ -60,6 +60,8 @@ profilepatient.html - Profile for patients
 registerdoctor.html - This page is not linked on website, is only for share
 registerpatient.html - Register section for visitors or futures patients
 reserva.html - Booking section.
+
+/booking/admin.py - Admin Section
 
 /booking/models.py - All models..
 User , Doctor , Patient , DayTimeAvailable, Appoinments.  
