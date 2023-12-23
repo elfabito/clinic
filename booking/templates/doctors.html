@@ -1,17 +1,18 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<div class="container-fluid" style=" padding: 35px ">
+<div class="container-fluid" style=" padding: 35px;  ">
     <p class="fs-2">Our Team </p>
     <div class="d-flex flex-wrap" style="justify-content: center;">
 
         </br>
         {% for doctor in doctors %}
 
-        <div style="align-items: center; text-align: center; padding: 25px 0px 0 0px; ">
+        <div style="align-items: center; text-align: center; padding: 25px 0px 0 0px;  ">
             <div class="card" style=" width: 18rem; height: auto">
                 {% if doctor.image %}
-                <img height="300" width="300" src="{{doctor.image.url}}" class="card-img-top" alt="...">
+                <img height="300" width="300" style="object-fit: cover; " src="{{doctor.image.url}}"
+                    class="card-img-top" alt="...">
                 {%else%}
                 <img height="300" width="300"
                     src="https://imgs.search.brave.com/jLTwrBSRPcoyhBJs1uPbMl500isS1N2O0JlI3BLUQoY/rs:fit:500:0:0/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJzLmNvbS9p/bWFnZXMvZmVhdHVy/ZWQvY29vbC1wcm9m/aWxlLXBpY3R1cmUt/ODdoNDZnY29iamw1/ZTR4dS5qcGc"
@@ -30,42 +31,42 @@
 
                     {% if doctortime.doctor.user.first_name == doctor.user.first_name %}
                     {% if doctortime.lunes %}
-                    <li class=" list-group-item" style="background-color: rgb(243, 231, 217);">Lunes</li>
+                    <li class=" list-group-item" style="background-color: rgb(243, 231, 217);">Monday</li>
                     {% for time in doctortime.lunes %}
                     <li class="list-group-item">{{time}}</li>
                     {%endfor%}
                     {%endif%}
 
                     {% if doctortime.martes %}
-                    <li class="list-group-item" style="background-color: rgb(243, 231, 217);">Martes</li>
+                    <li class="list-group-item" style="background-color: rgb(243, 231, 217);">Tuesday</li>
                     {% for time in doctortime.martes %}
                     <li class="list-group-item">{{time}}</li>
                     {%endfor%}
                     {%endif%}
 
                     {% if doctortime.miercoles %}
-                    <li class="list-group-item" style="background-color: rgb(243, 231, 217);">Miercoles</li>
+                    <li class="list-group-item" style="background-color: rgb(243, 231, 217);">Wednesday</li>
                     {% for time in doctortime.miercoles %}
                     <li class="list-group-item">{{time}}</li>
                     {%endfor%}
                     {%endif%}
 
                     {% if doctortime.jueves %}
-                    <li class="list-group-item" style="background-color: rgb(243, 231, 217);">Jueves</li>
+                    <li class="list-group-item" style="background-color: rgb(243, 231, 217);">Thursday</li>
                     {% for time in doctortime.jueves %}
                     <li class="list-group-item">{{time}}</li>
                     {%endfor%}
                     {%endif%}
 
                     {% if doctortime.viernes %}
-                    <li class="list-group-item" style="background-color: rgb(243, 231, 217);">Viernes</li>
+                    <li class="list-group-item" style="background-color: rgb(243, 231, 217);">Friday</li>
                     {% for time in doctortime.viernes %}
                     <li class="list-group-item">{{time}}</li>
                     {%endfor%}
                     {%endif%}
 
                     {% if doctortime.sabado %}
-                    <li class="list-group-item" style="background-color: rgb(243, 231, 217);">Sabado</li>
+                    <li class="list-group-item" style="background-color: rgb(243, 231, 217);">Saturday</li>
                     {% for time in doctortime.sabado %}
                     <li class="list-group-item">{{time}}</li>
                     {%endfor%}
@@ -77,10 +78,7 @@
 
                 </ul>
 
-                <!-- <div class="card-body">
-        <a href="#" class="card-link">Card link</a>
-        <a href="#" class="card-link">Another link</a>
-    </div> -->
+          
             </div>
         </div>
 

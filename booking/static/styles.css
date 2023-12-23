@@ -9,10 +9,16 @@ body {
   flex-direction: column;
   height: 100vh;
 }
+#footer {
+  position: fixed;
+  height: 50px;
 
-footer {
-  margin-top: auto;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  margin-bottom: 0px;
 }
+
 .accordion-item .accordion-button {
   display: block;
 }

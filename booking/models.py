@@ -63,7 +63,7 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('is_superuser', False)
         extra_fields.setdefault('is_patient', False)
         extra_fields.setdefault('is_doctor', False)
-        return self._create_user(email=email, password=password,first_name=first_name.capitalize(), last_name=last_name.capitalize(), **extra_fields)
+        return self._create_user(email=email, password=password,first_name=first_name.title(), last_name=last_name.title(), **extra_fields)
 
     def create_superuser(self, email, password, first_name, last_name, **extra_fields):
         extra_fields.setdefault('is_staff', True)
@@ -76,7 +76,7 @@ class UserManager(BaseUserManager):
         if extra_fields.get('is_superuser') is not True:
             raise ValueError('Superuser must have is_superuser=True.')
 
-        return self._create_user(email=email, password=password,first_name=first_name.capitalize(), last_name=last_name.capitalize(), **extra_fields)
+        return self._create_user(email=email, password=password,first_name=first_name.title(), last_name=last_name.title(), **extra_fields)
    
     def serialize(self):
         return {
@@ -96,12 +96,11 @@ class CustomUser(AbstractUser):
     username = None
     is_doctor = models.BooleanField(default=False)
     is_patient = models.BooleanField(default=False)
-    
-    
     email = models.EmailField(db_index=True, unique=True, max_length=250)
     objects = UserManager()
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
+    
     def serialize(self):
         return {
             "id": self.id,
@@ -114,16 +113,13 @@ class CustomUser(AbstractUser):
             
         }
     
-   
-
 class Doctor(models.Model):
+
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
     position = models.CharField(max_length=100, choices=CHOICES, blank=True)
     employment_date = models.DateTimeField(default=datetime.now)
-    
     image = models.ImageField(blank=True, null=True, upload_to="images/")
     phone = models.CharField(max_length=17, blank=True)
-    
     description = models.TextField(null=True)
     gender = models.CharField(choices=GENDER_CHOICES, max_length=128)
     
@@ -144,6 +140,7 @@ class Doctor(models.Model):
         }
     
 class DayTimeAvailable(models.Model):
+
     doctor = models.OneToOneField(Doctor, null=True, on_delete=models.CASCADE, related_name="daytime")
     lunes = MultiSelectField(max_choices=3,max_length=103, choices=TIME_CHOICES, blank=True, null=True)
     martes = MultiSelectField(max_choices=3,max_length=103, choices=TIME_CHOICES, blank=True, null=True)
@@ -151,6 +148,7 @@ class DayTimeAvailable(models.Model):
     jueves = MultiSelectField(max_choices=3,max_length=103, choices=TIME_CHOICES, blank=True, null=True)
     viernes = MultiSelectField(max_choices=3,max_length=103, choices=TIME_CHOICES, blank=True, null=True)
     sabado = MultiSelectField(max_choices=3,max_length=103, choices=TIME_CHOICES, blank=True, null=True)
+
     def __str__(self):
         return f'HORARIOS DE {self.doctor.user.first_name} // Lunes : {[time for time in self.lunes ]}  Martes : {[time for time in self.martes]} </br> Miercoles : {[time for time in self.miercoles]} </br> Jueves : {[time for time in self.jueves]} </br> Viernes : {[time for time in self.viernes]} </br> Sabado : {[time for time in self.sabado]}'
     def serialize(self):
@@ -163,13 +161,12 @@ class DayTimeAvailable(models.Model):
             "jueves" : self.jueves,
             "viernes": self.viernes,
             "sabado": self.sabado
-            
         }
     
 class Patient(models.Model):
+
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, primary_key=True)
     gender = models.CharField(choices=GENDER_CHOICES, max_length=128)
-       
     phone = models.CharField(max_length=17, blank=True)
     date_recorded = models.DateTimeField(default=datetime.now)
 
@@ -189,6 +186,7 @@ class Patient(models.Model):
         }
 @receiver(post_save, sender=CustomUser)
 def doctor(sender, instance, created, **kwargs):
+
     if created and instance.is_doctor:
         doctor =Doctor(user=instance)
         daytime = DayTimeAvailable(doctor=doctor)
@@ -200,21 +198,21 @@ def doctor(sender, instance, created, **kwargs):
 
   
 class Appointment(models.Model):
+
     id = models.AutoField(primary_key=True)
     patient = models.ForeignKey(Patient, on_delete=models.CASCADE, null=True, blank=True)
     phone = models.CharField(max_length=200)
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, null=True, blank=True)
     service = models.CharField(max_length=50)
-   
     datetime = models.DateTimeField(blank=False, null=False)
     comment = models.TextField( blank=True)
     time_ordered = models.DateTimeField(null=False, blank=False,auto_now_add=True)
     canceled = models.BooleanField(default=False)
     approved = models.BooleanField(default=False)
+
     def __str__(self):
         return f"{self.patient.user.first_name} | day: {self.datetime} | timeorder: {self.time_ordered}"
     
-   
     def serialize(self):
         return {
             "id": self.id,
@@ -228,6 +226,7 @@ class Appointment(models.Model):
             
             "approved": self.approved,
         }
+    
 class History(models.Model):
     patient = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     history = models.TextField()

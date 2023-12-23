@@ -8,7 +8,7 @@
 
 <div class="container-fluid" style=" padding: 35px 35px 0px 25px;">
 
-
+    <!-- Profile -->
     <p class="fs-2">Profile {{doctor.user.first_name}} </p>
 
     <div class="row" style="align-items: center; justify-content: center; text-align: center;">
@@ -228,8 +228,13 @@
         </div>
     </div>
 </div>
+
+<!-- Appointments -->
 <div class="container-fluid" style=" padding: 35px;">
     <div class="accordion accordion-flush" id="accordionFlushExample">
+
+        <!-- Next Appointments -->
+
         <div class="accordion-item">
             <h2 class="accordion-header" id="flush-headingOne">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
@@ -304,6 +309,9 @@
                 </div>
             </div>
         </div>
+
+        <!-- Appointments For Approve -->
+
         <div class="accordion-item">
             <h2 class="accordion-header" id="flush-headingTwo">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
@@ -354,6 +362,9 @@
                 </div>
             </div>
         </div>
+
+        <!-- Canceled Appointments -->
+
         <div class="accordion-item">
             <h2 class="accordion-header" id="flush-headingThree">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
@@ -431,10 +442,15 @@
 </div>
 
 
+<script>
+    document.querySelector("#lunes").style.display = "none";
+    document.querySelector("#martes").style.display = "none";
+    document.querySelector("#miercoles").style.display = "none";
+    document.querySelector("#jueves").style.display = "none";
+    document.querySelector("#viernes").style.display = "none";
+    document.querySelector("#sabado").style.display = "none";
 
-
-
-
+</script>
 
 
 {% endblock %}

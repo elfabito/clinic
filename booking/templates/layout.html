@@ -21,7 +21,7 @@
 
     <nav class="navbar navbar-expand-lg " style="background-color: #e3f2fd; padding: 15px">
         <div class="container-fluid">
-            <a class="navbar-brand" href="{% url 'index' %}">Clinica</a>
+            <a class="navbar-brand" href="{% url 'index' %}">Clinic</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -31,34 +31,31 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'alldoctors' %}">Doctors</a>
+                        <a class="nav-link" href="{% url 'alldoctors' %}">Therapists</a>
                     </li>
                     {% if user.is_authenticated %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
-                            Perfil
+                            Profile
                         </a>
                         <ul class="dropdown-menu">
                             {% if user.is_doctor %}
-                            <li><a class="dropdown-item" href="{% url 'perfildoctor' %}">Datos y Consultas</a></li>
-                            <!-- <li><a class="dropdown-item" id="hclinica">Proximas consultas</a></li> -->
-                            {%else%}
-                            <li><a class="dropdown-item" href="{% url 'perfil' %}">Datos y Consultas</a></li>
-                            <li><a class="dropdown-item" id="hclinica">Historia Clinica</a></li>
-                            {%endif%}
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
+                            <li><a class="dropdown-item" href="{% url 'perfildoctor' %}">Data and Queries</a></li>
 
-                            <li><a class="dropdown-item" id="consultas">Consultas Recientes</a></li>
+                            {%else%}
+                            <li><a class="dropdown-item" href="{% url 'perfil' %}">Data and Queries</a></li>
+                            <li><a class="dropdown-item" id="hclinica">Clinic history</a></li>
+                            {%endif%}
+                          
+
                         </ul>
 
                     </li>
                     {% if not user.is_doctor %}
                     <li class="nav-item">
                         <a class="nav-link active" href="{% url 'reservas' %}" aria-current="page"
-                            id="reservas">Reservar</a>
+                            id="reservas">Booking</a>
                     </li>
                     {%endif%}
                     <li class="nav-item">
@@ -67,7 +64,7 @@
                     {% else %}
 
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'registerPatient' %}">Registrarse</a>
+                        <a class="nav-link" href="{% url 'registerPatient' %}">Sign Up</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'login' %}">Log In</a>
@@ -101,7 +98,7 @@
     {% endblock %}
 
 
-    <footer class="text-center" style="background-color: #e3f2fd">
+    <footer id="footer" class="text-center" style="background-color: #e3f2fd">
 
 
         <!-- Copyright -->

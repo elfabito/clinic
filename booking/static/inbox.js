@@ -1,20 +1,3 @@
-document.addEventListener("DOMContentLoaded", function () {
-  document.querySelector("#lunes").style.display = "none";
-  document.querySelector("#martes").style.display = "none";
-  document.querySelector("#miercoles").style.display = "none";
-  document.querySelector("#jueves").style.display = "none";
-  document.querySelector("#viernes").style.display = "none";
-  document.querySelector("#sabado").style.display = "none";
-
-  document
-    .getElementById("specialist")
-    .addEventListener("change", function (e) {
-      e.stopPropagation();
-      e.preventDefault();
-
-      dynamicdropdown(e);
-    });
-});
 function esDiferenteDia(diaSemana) {
   let diaActual = new Date().getDay();
 
@@ -47,15 +30,15 @@ function populateDropdown(doctor, name, dayOfWeek, availableTimes) {
   const timeDropdown = document.createElement("select");
   const space = document.createElement("br");
   timeDropdown.className = "btn btn-outline-";
-
+  // timeDropdown.data.toggle = "dropdown";
   const days = [
-    "Domingo",
-    "Lunes",
-    "Martes",
-    "Miercoles",
-    "Jueves",
-    "Viernes",
-    "Sabado",
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
   ];
   const option0 = document.createElement("option");
   timeDropdown.id = `${name} ${siguienteFecha(dayOfWeek)}`;
@@ -80,6 +63,7 @@ function populateDropdown(doctor, name, dayOfWeek, availableTimes) {
   timeDropdown.appendChild(space);
   document.getElementById("time").appendChild(timeDropdown);
 }
+
 function getOption(doctor, name, dayOfWeek) {
   selected = document.getElementById(`${name} ${siguienteFecha(dayOfWeek)}`);
   value = selected.value;
@@ -109,6 +93,7 @@ function getOption(doctor, name, dayOfWeek) {
       reserva(doctor, dayOfWeek);
     });
 }
+
 function dynamicdropdown(el) {
   var br = document.createElement("br");
 
@@ -157,38 +142,13 @@ function dynamicdropdown(el) {
         time.innerHTML = "";
         if (k.length == 0) {
           time.textContent = "";
+          time.append(br);
           let div = document.createElement("div");
-          div.innerHTML = `No Doctor Found`;
+          div.innerHTML = `No Therapist Found`;
           time.appendChild(div);
         }
 
         k.map((doctor) => {
-          // document
-          //   .getElementById("formreserva")
-          //   .addEventListener("submit", function (e) {
-          //     e.stopPropagation();
-          //     e.preventDefault();
-          //     document
-          //       .getElementById("formreserva")
-          //       .addEventListener("submit", function (e) {
-          //         e.stopPropagation();
-          //         e.preventDefault();
-
-          //         reserva(doctor);
-          //       });
-          //   });
-          // checkbox = document.getElementById(`${doctor.first_name}`);
-          // if (checkbox.checked) {
-          //   document
-          //     .getElementById("formreserva")
-          //     .addEventListener("submit", function (e) {
-          //       e.stopPropagation();
-          //       e.preventDefault();
-
-          //       reserva(doctor);
-          //     });
-          // }
-
           fetch(`/available/${doctor.user_id}`)
             .then((response) => response.json())
             .then((data) => {
@@ -198,11 +158,6 @@ function dynamicdropdown(el) {
               let label = document.createElement("label");
               label.innerHTML = `${doctor.first_name}' available schedules`;
 
-              let input = document.createElement("input");
-              // input.type = "checkbox";
-              // input.id = `${doctor.first_name}`;
-              // input.value = `${doctor.first_name}`;
-              // label.appendChild(input);
               time.appendChild(label);
               let br = document.createElement("br");
               time.appendChild(br);
@@ -262,37 +217,20 @@ function dynamicdropdown(el) {
         time.innerHTML = "";
         if (q.length == 0) {
           time.textContent = "";
+          time.append(br);
           let div = document.createElement("div");
-          div.innerHTML = `No Doctor Found`;
+          div.innerHTML = `No Therapist Found`;
           time.appendChild(div);
         }
 
         q.map((doctor) => {
-          document
-            .getElementById("formreserva")
-            .addEventListener("submit", function (e) {
-              e.stopPropagation();
-              e.preventDefault();
-            });
-          // checkbox = document.getElementById(`${doctor.first_name}`);
-          // if (checkbox.checked) {
-          //   document
-          //     .getElementById("formreserva")
-          //     .addEventListener("submit", function (e) {
-          //       e.stopPropagation();
-          //       e.preventDefault();
-
-          //       reserva(doctor);
-          //     });
-          // }
-
           fetch(`/available/${doctor.user_id}`)
             .then((response) => response.json())
             .then((data) => {
               let doctoravailable = data.available;
 
               let label = document.createElement("div");
-              label.innerHTML = `Horarios Disponibles de ${doctor.first_name}  `;
+              label.innerHTML = `${doctor.first_name}' available schedules  `;
               time.appendChild(label);
               if (doctoravailable.lunes.length != 0 && esDiferenteDia(1)) {
                 populateDropdown(doctor.first_name, 1, doctoravailable.lunes);
@@ -322,30 +260,13 @@ function dynamicdropdown(el) {
         time.innerHTML = "";
         if (m.length == 0) {
           time.textContent = "";
+          time.append(br);
           let div = document.createElement("div");
-          div.innerHTML = `No Doctor Found`;
+          div.innerHTML = `No Therapist Found`;
           time.appendChild(div);
         }
 
         m.map((doctor) => {
-          document
-            .getElementById("formreserva")
-            .addEventListener("submit", function (e) {
-              e.stopPropagation();
-              e.preventDefault();
-              // checkbox = document.getElementById(`${doctor.first_name}`);
-              // if (checkbox.checked) {
-              //   document
-              //     .getElementById("formreserva")
-              //     .addEventListener("submit", function (e) {
-              //       e.stopPropagation();
-              //       e.preventDefault();
-
-              //       reserva(doctor);
-              //     });
-              // }
-            });
-
           fetch(`/available/${doctor.user_id}`)
             .then((response) => response.json())
             .then((data) => {
@@ -353,13 +274,8 @@ function dynamicdropdown(el) {
               let br1 = document.createElement("br");
               time.appendChild(br1);
               let label = document.createElement("label");
-              label.innerHTML = `Horarios Disponibles de  ${doctor.first_name}  `;
+              label.innerHTML = `${doctor.first_name}' available schedules  `;
 
-              let input = document.createElement("input");
-              input.type = "checkbox";
-              input.id = `${doctor.first_name}`;
-              input.value = `${doctor.first_name}`;
-              label.appendChild(input);
               time.appendChild(label);
               let br = document.createElement("br");
               time.appendChild(br);
@@ -388,10 +304,64 @@ function dynamicdropdown(el) {
             });
         });
       } else {
-        time.textContent = "";
-        let div = document.createElement("div");
-        div.innerHTML = `No Doctor Found`;
-        time.appendChild(div);
+        time.innerHTML = "";
+        if (o.length == 0) {
+          time.textContent = "";
+          time.append(br);
+          let div = document.createElement("div");
+          div.innerHTML = `No Therapist Found`;
+          time.appendChild(div);
+        }
+
+        o.map((doctor) => {
+          fetch(`/available/${doctor.user_id}`)
+            .then((response) => response.json())
+            .then((data) => {
+              let doctoravailable = data.available;
+              let br1 = document.createElement("br");
+              time.appendChild(br1);
+              let label = document.createElement("label");
+              label.innerHTML = `${doctor.first_name}' available schedules  `;
+
+              time.appendChild(label);
+              let br = document.createElement("br");
+              time.appendChild(br);
+              if (doctoravailable.lunes.length != 0 && esDiferenteDia(1)) {
+                populateDropdown(doctor.first_name, 1, doctoravailable.lunes);
+              }
+              if (doctoravailable.martes.length != 0 && esDiferenteDia(2)) {
+                populateDropdown(doctor.first_name, 2, doctoravailable.martes);
+              }
+              if (doctoravailable.miercoles.length != 0 && esDiferenteDia(3)) {
+                populateDropdown(
+                  doctor.first_name,
+                  3,
+                  doctoravailable.miercoles
+                );
+              }
+              if (doctoravailable.jueves.length != 0 && esDiferenteDia(4)) {
+                populateDropdown(doctor.first_name, 4, doctoravailable.jueves);
+              }
+              if (doctoravailable.viernes.length != 0 && esDiferenteDia(5)) {
+                populateDropdown(doctor.first_name, 5, doctoravailable.viernes);
+              }
+              if (doctoravailable.sabado.length != 0 && esDiferenteDia(6)) {
+                populateDropdown(doctor.first_name, 6, doctoravailable.sabado);
+              }
+              if (
+                doctoravailable.lunes.length == 0 &&
+                doctoravailable.martes.length == 0 &&
+                doctoravailable.miercoles.length == 0 &&
+                doctoravailable.jueves.length == 0 &&
+                doctoravailable.viernes.length == 0 &&
+                doctoravailable.sabado.length == 0
+              ) {
+                text = document.createElement("label");
+                text.innerHTML = `Contact Number ${doctor.phone}`;
+                time.appendChild(text);
+              }
+            });
+        });
       }
     });
 }
@@ -776,37 +746,22 @@ function editPosition() {
     });
   });
 }
+
 function reserva(doctor, dayOfWeek) {
-  // var elems = document.querySelectorAll("select");
-  // a = [];
-  // console.log(elems);
-  // for (var i = 0; i < elems.length; i++) {
-  //   if ((elems[i].disabled = false)) {
-  //     a.push(elems[i]);
-  //   }
-  // }
   selected = document.getElementById(
     `${doctor.first_name} ${siguienteFecha(dayOfWeek)}`
   );
   value = selected.value;
   fecha = siguienteFecha(dayOfWeek);
+
+  // Format date to datetimefield , i recieve (DAY / MONTH / YEAR )
+
   date = fecha.split("/");
   dateeng = date.reverse().join("-");
-  console.log(dateeng);
-  console.log(`TIME : ${value}`);
-  console.log(siguienteFecha(dayOfWeek));
   time = value.split(":");
-  console.log(time);
   datetime = dateeng + " " + time[0] + ":00";
-  console.log(datetime);
-  var date = document.getElementById("id_datetime");
+
   var comment = document.getElementById("id_comment");
-  const doc = JSON.parse(JSON.stringify(doctor));
-  // let time = getOption(doctor.user.first_name, dayOfWeek);
-  console.log(doctor);
-  console.log(doc);
-  console.log(typeof doc);
-  checkbox = document.getElementById(`${doctor.first_name}`);
 
   fetch(`reserva`, {
     method: "POST",
@@ -819,25 +774,12 @@ function reserva(doctor, dayOfWeek) {
   })
     .then((response) => response.json())
     .then((result) => {
-      // alert("Appointment successfully");
-      // location.href = "profile";
-      // alert(JSON.stringify(result["msg"]));
       if (result["msg"] == "Register Successfully, wait for approved") {
-        // document.getElementById("msg").innerHTML = result["msg"];
         location.href = "profile";
       } else {
-        // document.getElementById("msg").innerHTML = result["msg"];
         window.location.reload();
       }
     });
-
-  // document
-  //   .getElementById("formreserva")
-  //   .addEventListener("submit", function (e) {
-  //     e.stopPropagation();
-  //     e.preventDefault();
-
-  //     reserva(doctor);
 }
 
 function approved(id) {
@@ -851,6 +793,7 @@ function approved(id) {
     window.location.reload();
   });
 }
+
 function cancelAppoint(id) {
   fetch(`reserva/${id}`, {
     method: "PUT",
@@ -862,6 +805,7 @@ function cancelAppoint(id) {
     window.location.reload();
   });
 }
+
 function deleteAppoint(id) {
   fetch(`reserva/${id}`, {
     method: "DELETE",
@@ -883,44 +827,3 @@ function imagedata(id) {
     window.location.reload();
   });
 }
-
-// Display "image" in Local storage as src of img preview even after page refreshes
-
-// function editPatient() {
-//   var element = document.getElementById("editformPatient");
-//   element.addEventListener("submit", (e) => {
-//     e.preventDefault();
-
-//     fetch(`registerpatient`, {
-//       method: "POST",
-//       body: JSON.stringify({
-//         is_patient: true,
-//       }),
-//     })
-//       .then((response) => response.json())
-//       .then((result) => {
-//         console.log(result);
-//         console.log("hola");
-//         load_inicio();
-//       });
-//   });
-// }
-// function createDoctor() {
-//   var element = document.getElementById("formPatient");
-//   element.addEventListener("submit", (e) => {
-//     e.preventDefault();
-
-//     fetch(`registerdoctor`, {
-//       method: "POST",
-//       body: JSON.stringify({
-//         is_doctor: true,
-//       }),
-//     })
-//       .then((response) => response.json())
-//       .then((result) => {
-//         console.log(result);
-//         console.log("hola");
-//         load_inicio();
-//       });
-//   });
-// }
