@@ -47,19 +47,19 @@ Distinctiveness lies in its specialized healthcare focus and tailored user exper
 # What’s contained in each file you created:
 
 - /statics/
-- inbox.js . All Javascript functions.
-- Styles.css Some Style to complement the website
+-- inbox.js . All Javascript functions.
+-- Styles.css Some Style to complement the website
 
 - /templates/
-- doctors.html - Section for show all therapist
-- index.html - Home Section
-- layout.html - The layout or template is a diagram of the distribution of the elements. ( html tag, head, navbar, body , footer)
-- login.html - Login Section
-- profiledoctor.html - Profile for doctors
-- profilepatient.html - Profile for patients
-- registerdoctor.html - This page is not linked on website, is only for share
-- registerpatient.html - Register section for visitors or futures patients
-- reserva.html - Booking section.
+-- doctors.html - Section for show all therapist
+-- index.html - Home Section
+-- layout.html - The layout or template is a diagram of the distribution of the elements. ( html tag, head, navbar, body , footer)
+-- login.html - Login Section
+-- profiledoctor.html - Profile for doctors
+-- profilepatient.html - Profile for patients
+-- registerdoctor.html - This page is not linked on website, is only for share
+-- registerpatient.html - Register section for visitors or futures patients
+-- reserva.html - Booking section.
 
 - /booking/admin.py - Admin Section
 
