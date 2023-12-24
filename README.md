@@ -61,15 +61,17 @@ Distinctiveness lies in its specialized healthcare focus and tailored user exper
 - registerpatient.html - Register section for visitors or futures patients
 - reserva.html - Booking section.
 
-- /booking/admin.py - Admin Section
+ /booking/
 
-- /booking/models.py - All models..
+- admin.py - Admin Section
+
+- models.py - All models..
 User , Doctor , Patient , DayTimeAvailable, Appoinments.  
 Each attribute of the model represents a database field
 
-- /booking/url.py - All urls..Routes for the website, and api routes restfull.
+- url.py - All urls..Routes for the website, and api routes restfull.
 
-- /booking/views.py - Diferents Python functions that takes http requests and returns http response or jsonresponse depending on wich url is excecuted
+- views.py - Diferents Python functions that takes http requests and returns http response or jsonresponse depending on wich url is excecuted
 
 - /media/images - All images upload are going to be here.
 
@@ -86,6 +88,14 @@ You should run
 * It will look like this (venv) C:\Users\user\Desktop\DjangoProject>
 
 * Then run pip install -r requirements.txt
+
+Note : In Visual Basic:
+Press "Ctrl" + "Shift" + "p" . 
+Python Create Enviroment, Select venv, and select requirements.txt.
+This should create the enviroments.
+Open Terminal as Admin, go to your proyect folder.
+and run .\env\Scripts\activate
+
 
 * Migrations:
 
