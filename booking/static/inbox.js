@@ -233,26 +233,52 @@ function dynamicdropdown(el) {
               label.innerHTML = `${doctor.first_name}' available schedules  `;
               time.appendChild(label);
               if (doctoravailable.lunes.length != 0 && esDiferenteDia(1)) {
-                populateDropdown(doctor.first_name, 1, doctoravailable.lunes);
+                populateDropdown(
+                  doctor,
+                  doctor.first_name,
+                  1,
+                  doctoravailable.lunes
+                );
               }
               if (doctoravailable.martes.length != 0 && esDiferenteDia(2)) {
-                populateDropdown(doctor.first_name, 2, doctoravailable.martes);
+                populateDropdown(
+                  doctor,
+                  doctor.first_name,
+                  2,
+                  doctoravailable.martes
+                );
               }
               if (doctoravailable.miercoles.length != 0 && esDiferenteDia(3)) {
                 populateDropdown(
+                  doctor,
                   doctor.first_name,
                   3,
                   doctoravailable.miercoles
                 );
               }
               if (doctoravailable.jueves.length != 0 && esDiferenteDia(4)) {
-                populateDropdown(doctor.first_name, 4, doctoravailable.jueves);
+                populateDropdown(
+                  doctor,
+                  doctor.first_name,
+                  4,
+                  doctoravailable.jueves
+                );
               }
               if (doctoravailable.viernes.length != 0 && esDiferenteDia(5)) {
-                populateDropdown(doctor.first_name, 5, doctoravailable.viernes);
+                populateDropdown(
+                  doctor,
+                  doctor.first_name,
+                  5,
+                  doctoravailable.viernes
+                );
               }
               if (doctoravailable.sabado.length != 0 && esDiferenteDia(6)) {
-                populateDropdown(doctor.first_name, 6, doctoravailable.sabado);
+                populateDropdown(
+                  doctor,
+                  doctor.first_name,
+                  6,
+                  doctoravailable.sabado
+                );
               }
             });
         });
@@ -280,26 +306,52 @@ function dynamicdropdown(el) {
               let br = document.createElement("br");
               time.appendChild(br);
               if (doctoravailable.lunes.length != 0 && esDiferenteDia(1)) {
-                populateDropdown(doctor.first_name, 1, doctoravailable.lunes);
+                populateDropdown(
+                  doctor,
+                  doctor.first_name,
+                  1,
+                  doctoravailable.lunes
+                );
               }
               if (doctoravailable.martes.length != 0 && esDiferenteDia(2)) {
-                populateDropdown(doctor.first_name, 2, doctoravailable.martes);
+                populateDropdown(
+                  doctor,
+                  doctor.first_name,
+                  2,
+                  doctoravailable.martes
+                );
               }
               if (doctoravailable.miercoles.length != 0 && esDiferenteDia(3)) {
                 populateDropdown(
+                  doctor,
                   doctor.first_name,
                   3,
                   doctoravailable.miercoles
                 );
               }
               if (doctoravailable.jueves.length != 0 && esDiferenteDia(4)) {
-                populateDropdown(doctor.first_name, 4, doctoravailable.jueves);
+                populateDropdown(
+                  doctor,
+                  doctor.first_name,
+                  4,
+                  doctoravailable.jueves
+                );
               }
               if (doctoravailable.viernes.length != 0 && esDiferenteDia(5)) {
-                populateDropdown(doctor.first_name, 5, doctoravailable.viernes);
+                populateDropdown(
+                  doctor,
+                  doctor.first_name,
+                  5,
+                  doctoravailable.viernes
+                );
               }
               if (doctoravailable.sabado.length != 0 && esDiferenteDia(6)) {
-                populateDropdown(doctor.first_name, 6, doctoravailable.sabado);
+                populateDropdown(
+                  doctor,
+                  doctor.first_name,
+                  6,
+                  doctoravailable.sabado
+                );
               }
             });
         });
@@ -400,6 +452,8 @@ function editPhone() {
         btn.innerHTML = "";
         btn.append(btnEdit);
         element.innerHTML = value;
+        document.getElementById("data").innerHTML = "";
+        location.href = "profile";
       });
     } else {
       alert("Insert a valid phone, like +59899999999");

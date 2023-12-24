@@ -3,7 +3,7 @@
 {% block body %}
 <div class="container-fluid" style=" padding: 35px;  ">
     <p class="fs-2">Our Team </p>
-    <div class="d-flex flex-wrap" style="justify-content: center;">
+    <div class="d-flex flex-wrap" style="justify-content: center;margin-bottom: 45px; ">
 
         </br>
         {% for doctor in doctors %}
@@ -21,7 +21,8 @@
 
                 <div class="card-body" style="padding-bottom: 0; flex: 0">
                     <h5 class="card-title">{{doctor.user.first_name}} {{doctor.user.last_name}}</h5>
-                    <p class="card-text" style="height: 100px;padding-bottom: 0;">{{doctor.description}}</p>
+                    <p class="card-text" style="height: 100px;padding-bottom: 0;">{% if doctor.description %}
+                        {{doctor.description}} {%endif%}</p>
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">{{doctor.position}}</li>
@@ -78,7 +79,7 @@
 
                 </ul>
 
-          
+
             </div>
         </div>
 

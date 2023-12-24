@@ -33,6 +33,23 @@ height: 50vh;
     </div>
 </div>
 
+<div class="card text-center">
+    <div class="card-header">
+        Specialized sessions lasting one hour.
+    </div>
+    <div class="card-body">
+        <h5 class="card-title">Teraphist Treatment </h5>
+        <p class="card-text">​
+            The price varies between U$S 50, U$S 60, depending on the therapist's treatment.</p>
+        {% if user.is_authenticated %}
+        <a href="{% url 'reservas'%}" class="btn btn-primary">Schedule now</a>
+        {%else%}
+        <a href="{% url 'registerPatient'%}" class="btn btn-primary">Schedule now</a>
+        {%endif%}
+    </div>
+
+</div>
+
 <div id="carouselExampleCaptions" class="carousel slide">
     <div class="carousel-indicators">
         <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active"
@@ -81,9 +98,11 @@ height: 50vh;
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
     </button>
+
 </div>
 
-
+<div></br>
+    </br></div>
 
 
 {% endblock %}

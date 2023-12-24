@@ -20,7 +20,7 @@
     <p class="fs-2">Profile {{patient.user.first_name}} </p>
     </br>
     <div>{% if not patient.phone %}
-        <p>Please Fill phone and gender before make an appoinment</p>
+        <p id="data">Please Fill phone and gender before make an appoinment</p>
         {%endif%}
     </div>
 
@@ -67,7 +67,7 @@
     </table>
 </div>
 <div class="container-fluid" style=" padding: 35px;">
-    <div class="accordion accordion-flush" id="accordionFlushExample">
+    <div class="accordion accordion-flush" id="accordionFlushExample" style=" margin-bottom: 45px;">
 
         <!-- Next Appointments -->
 
@@ -95,8 +95,8 @@
 
 
                                 <div class="card-body">
-                                    <h5 class="card-title">Booking from {{appoint.doctor}}</h5>
-                                    <p class="card-text">Comments : {{appoint.comment}}</p>
+                                    <h5 class="card-title">Booking with {{appoint.doctor}}</h5>
+
                                     <p>{{appoint.datetime|date:"l d F Y"}}</p>
                                     <p>TIME : {{appoint.datetime|date:"g:i a"}}</p>
 
@@ -144,9 +144,9 @@
 
 
                                 <div class="card-body">
-                                    <h6 class="card-title">Booking from {{appoint.doctor}}( Esperando por
+                                    <h6 class="card-title">Booking with {{appoint.doctor}}( Esperando por
                                         aprobar... )</h6>
-                                    <p class="card-text">Comments : {{appoint.comment}}</p>
+
                                     <p>{{appoint.datetime|date:"l d F Y"}}</p>
                                     <p>TIME : {{appoint.datetime|date:"g:i a"}}</p>
                                     <button type="button" class="btn btn-primary" data-bs-toggle="modal"
@@ -223,8 +223,8 @@
 
 
                                 <div class="card-body">
-                                    <h5 class="card-title">Booking from {{appoint.doctor}}</h5>
-                                    <p class="card-text">Comments : {{appoint.comment}}</p>
+                                    <h5 class="card-title">Booking with {{appoint.doctor}}</h5>
+
                                     <p>{{appoint.datetime|date:"l d F Y"}}</p>
                                     <p>TIME : {{appoint.datetime|date:"g:i a"}}</p>
 

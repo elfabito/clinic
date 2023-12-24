@@ -138,11 +138,7 @@ def editUser(request, id):
         if user.is_patient == True:
             return JsonResponse(patient.serialize())
         elif user.is_doctor == True:
-            # available_serialize = available.serialize()
-            # data = {
-            #     "doctor":doctor.serialize(),
-            #     "available": available_serialize
-            # }
+            
             return JsonResponse(doctor.serialize(), safe=False)
     elif request.method == "PUT":
         
