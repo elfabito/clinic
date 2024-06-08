@@ -11,10 +11,11 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.base_user import BaseUserManager
 from multiselectfield import MultiSelectField
 from django.db.models.signals import post_save
+
 GENDER_CHOICES = (
-    ("Male", "Male"),
-    ("Female", "Female"),
-    ("Dont want to say", "Dont want to say"))
+    ("Masculino", "Masculino"),
+    ("Femenino", "Femenino"),
+    ("Otro", "Otro"))
 CHOICES = (
     ("Kinesiologia", "Kinesiologia"),
     ("Masajista", "Masajista"),
@@ -124,7 +125,7 @@ class Doctor(models.Model):
     gender = models.CharField(choices=GENDER_CHOICES, max_length=128)
     
     def __str__(self):
-        return f"{self.user.first_name} | position: {self.position}"
+        return f"{self.user.first_name} | posición: {self.position}"
     def serialize(self):
         return {
             "user_id": self.user.id,
