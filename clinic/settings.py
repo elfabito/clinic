@@ -96,7 +96,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'clinic-database',
-        'USER': 'slqgotmqhb',
+        'USER': 'gbngbaloce',
         'PASSWORD': str(os.getenv('PGPASS')),
         'HOST': str(os.getenv('PGHOST')),
         'PORT': str(os.getenv('PGPORT'))
