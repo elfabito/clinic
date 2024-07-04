@@ -54,7 +54,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
-
+CSRF_TRUSTED_ORIGINS = [
+    'https://clinicapp.azurewebsites.net',
+]
 ROOT_URLCONF = 'clinic.urls'
 MESSAGE_TAGS = {
     messages.DEBUG: 'alert-dark',
