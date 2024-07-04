@@ -41,10 +41,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'booking',
     'multiselectfield',
-    
+    'corsheaders',
 ]
 AUTH_USER_MODEL = 'booking.CustomUser'
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -54,9 +55,16 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
+CORS_ALLOWED_ORIGINS = [
+    'https://clinicapp.azurewebsites.net',
+]
 CSRF_TRUSTED_ORIGINS = [
     'https://clinicapp.azurewebsites.net',
 ]
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
 ROOT_URLCONF = 'clinic.urls'
 MESSAGE_TAGS = {
     messages.DEBUG: 'alert-dark',
