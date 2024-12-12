@@ -18,7 +18,7 @@ from django.contrib.messages import constants as messages
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 USE_L10N = False
-
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
 DATE_INPUT_FORMATS = ['%d/%m/%Y']
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
