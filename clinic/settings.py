@@ -53,7 +53,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
-    'corsheaders.middleware.CorsMiddleware'
 ]
 
 # Azure Config
@@ -66,8 +65,12 @@ MIDDLEWARE = [
 #]
 #ALLOWED_HOSTS = ['clinicApp.azurewebsites.net']
 
-CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOWED_ORIGINS = os.getenv('CORS', '').split(',')
+CORS_ALLOWED_ORIGINS = [
+    origin for origin in os.getenv(
+        'CORS',
+        'https://clinic-git-main-elfabitos-projects.vercel.app'
+    ).split(',') if origin
+]
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 
